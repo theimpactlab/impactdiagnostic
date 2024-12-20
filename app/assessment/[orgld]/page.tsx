@@ -56,6 +56,7 @@ interface AssessmentFormData {
 export default function AssessmentForm({ params }: { params: { orgId: string } }) {
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [formData, setFormData] = useState<AssessmentFormData>({
     organizationName: '',
@@ -106,7 +107,12 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
   }, [params.orgId])
 
   async function fetchAssessmentData() {
+    setIsLoading(true)
+    setError(null)
+
     try {
+      console.log('Fetching organization data for ID:', params.orgId)
+      
       // First get the organization name
       const { data: orgData, error: orgError } = await supabase
         .from('organizations')
@@ -114,7 +120,12 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         .eq('id', params.orgId)
         .single()
 
-      if (orgError) throw orgError
+      if (orgError) {
+        console.error('Error fetching organization:', orgError)
+        throw new Error('Organization not found')
+      }
+
+      console.log('Organization data:', orgData)
 
       // Then get any existing assessment
       const { data: assessmentData, error: assessmentError } = await supabase
@@ -123,9 +134,13 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         .eq('organization_id', params.orgId)
         .single()
 
-      if (assessmentError && assessmentError.code !== 'PGRST116') { // PGRST116 is "not found"
-        throw assessmentError
+      // Only throw error if it's not a "not found" error
+      if (assessmentError && assessmentError.code !== 'PGRST116') {
+        console.error('Error fetching assessment:', assessmentError)
+        throw new Error('Error fetching assessment data')
       }
+
+      console.log('Assessment data:', assessmentData)
 
       setFormData({
         ...formData,
@@ -133,8 +148,10 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         ...(assessmentData || {})
       })
     } catch (error) {
-      console.error('Error fetching data:', error)
-      setError('Failed to load assessment data')
+      console.error('Error in fetchAssessmentData:', error)
+      setError(error instanceof Error ? error.message : 'Failed to load assessment data')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -152,7 +169,10 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
-      const { error } = await supabase
+      console.log('Submitting assessment for organization:', params.orgId)
+      console.log('Form data:', formData)
+
+      const { error: submitError } = await supabase
         .from('assessments')
         .upsert({
           organization_id: parseInt(params.orgId, 10),
@@ -198,12 +218,15 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
           system_connectivity: formData.system_connectivity
         })
 
-      if (error) throw error
+      if (submitError) {
+        console.error('Error submitting assessment:', submitError)
+        throw new Error('Failed to save assessment')
+      }
 
       router.push('/dashboard')
     } catch (error) {
-      console.error('Error saving assessment:', error)
-      setError('Failed to save assessment. Please try again.')
+      console.error('Error in handleSubmit:', error)
+      setError(error instanceof Error ? error.message : 'Failed to save assessment')
     } finally {
       setIsSubmitting(false)
     }
@@ -228,13 +251,29 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     </div>
   )
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Loading assessment...</h2>
+          <p className="text-gray-500">Please wait while we fetch the data.</p>
+        </div>
+      </div>
+    )
+  }
+
   if (error) {
     return (
-      <div className="p-4">
-        <div className="text-red-500">{error}</div>
-        <Button onClick={() => router.push('/dashboard')} className="mt-4">
-          Return to Dashboard
-        </Button>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2 text-red-600">{error}</h2>
+          <Button 
+            onClick={() => router.push('/dashboard')} 
+            className="mt-4"
+          >
+            Return to Dashboard
+          </Button>
+        </div>
       </div>
     )
   }
