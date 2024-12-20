@@ -6,21 +6,27 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { setAuth } from '@/lib/auth'
 
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    setIsLoading(true)
 
     try {
-      // Check credentials
       if (username === 'admin' && password === 'password') {
-        // Force a hard navigation to ensure page reload
+        // Set authentication
+        setAuth()
+        // Set auth cookie
+        document.cookie = 'auth=true; path=/'
+        // Navigate to dashboard
         window.location.href = '/dashboard'
       } else {
         setError('Invalid credentials')
@@ -28,6 +34,8 @@ export default function Login() {
     } catch (error) {
       console.error('Login error:', error)
       setError('An error occurred. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -62,6 +70,7 @@ export default function Login() {
                   onChange={(e) => setUsername(e.target.value)}
                   required
                   className="w-full"
+                  disabled={isLoading}
                 />
               </div>
               <div className="space-y-2">
@@ -73,6 +82,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full"
+                  disabled={isLoading}
                 />
               </div>
               {error && (
@@ -83,8 +93,9 @@ export default function Login() {
               <Button 
                 type="submit" 
                 className="w-full bg-[#f7d32e] text-black hover:bg-[#e6c41d] font-semibold"
+                disabled={isLoading}
               >
-                Sign in
+                {isLoading ? 'Signing in...' : 'Sign in'}
               </Button>
             </form>
           </CardContent>
