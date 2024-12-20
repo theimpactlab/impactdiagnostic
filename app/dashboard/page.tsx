@@ -24,27 +24,27 @@ export default function Dashboard() {
       const { data, error } = await supabase
         .from('organizations')
         .select(`
-        *,
-        assessments (
-          id
-        )
-      `)
+          *,
+          assessments (
+            id
+          )
+        `)
         .order('created_at', { ascending: false })
-  
-    if (error) {
-      logSupabaseError(error, 'fetchOrganizations')
-      throw new Error('Failed to fetch organizations')
-    }
+    
+      if (error) {
+        logSupabaseError(error, 'fetchOrganizations')
+        throw new Error('Failed to fetch organizations')
+      }
 
-    console.log('Fetched organizations:', data)
-    setOrganizations(data || [])
-  } catch (error) {
-    console.error('Error:', error)
-    setError(error instanceof Error ? error.message : 'An error occurred')
-  } finally {
-    setIsLoading(false)
+      console.log('Fetched organizations:', data)
+      setOrganizations(data || [])
+    } catch (error) {
+      console.error('Error:', error)
+      setError(error instanceof Error ? error.message : 'An error occurred')
+    } finally {
+      setIsLoading(false)
+    }
   }
-}
 
   async function createNewOrganization(e: React.FormEvent) {
     e.preventDefault()
@@ -81,6 +81,11 @@ export default function Dashboard() {
     router.push(`/assessment/${orgId}`)
   }
 
+  function viewResults(orgId: number) {
+    console.log('Viewing results for organization:', orgId)
+    router.push(`/assessment/${orgId}/results`)
+  }
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -93,7 +98,7 @@ export default function Dashboard() {
   }
 
   return (
-    <Card>
+    <Card className="max-w-4xl mx-auto my-8">
       <CardHeader>
         <CardTitle>Impact Assessment Dashboard</CardTitle>
       </CardHeader>
@@ -128,7 +133,7 @@ export default function Dashboard() {
                     <div>
                       {org.assessments && org.assessments.length > 0 ? (
                         <Button 
-                          onClick={() => router.push(`/assessment/${org.id}/results`)}
+                          onClick={() => viewResults(org.id)}
                           className="bg-blue-500 text-white hover:bg-blue-600 mr-2"
                         >
                           View Results
