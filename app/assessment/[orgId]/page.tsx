@@ -111,15 +111,13 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
-      // Ensure we're working with a valid organization ID
-      if (!params.orgId) {
-        throw new Error('Organization ID is required')
+      const orgId = parseInt(params.orgId, 10)
+      if (isNaN(orgId)) {
+        throw new Error('Invalid organization ID')
       }
 
-      const orgId = parseInt(params.orgId, 10)
-      console.log('Parsed organization ID:', orgId) // Debug log
-
-      // First get the organization name
+      console.log('Fetching organization data for ID:', orgId)
+      
       const { data: orgData, error: orgError } = await supabase
         .from('organizations')
         .select('*')
@@ -135,18 +133,20 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         throw new Error('Organization not found')
       }
 
-      // Then get any existing assessment
+      console.log('Organization data:', orgData)
+
       const { data: assessmentData, error: assessmentError } = await supabase
         .from('assessments')
         .select('*')
         .eq('organization_id', orgId)
         .single()
 
-      // Only throw error if it's not a "not found" error
       if (assessmentError && assessmentError.code !== 'PGRST116') {
         console.error('Error fetching assessment:', assessmentError)
         throw new Error('Error fetching assessment data')
       }
+
+      console.log('Assessment data:', assessmentData)
 
       setFormData({
         ...formData,
@@ -178,7 +178,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
       console.log('Submitting assessment for organization:', params.orgId)
       console.log('Form data:', formData)
 
-      const { error: submitError } = await supabase
+      const { data, error: submitError } = await supabase
         .from('assessments')
         .upsert({
           organization_id: parseInt(params.orgId, 10),
@@ -223,12 +223,14 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
           system_customization: formData.system_customization,
           system_connectivity: formData.system_connectivity
         })
+        .select()
 
       if (submitError) {
         console.error('Error submitting assessment:', submitError)
         throw new Error('Failed to save assessment')
       }
 
+      console.log('Assessment saved successfully:', data)
       router.push('/dashboard')
     } catch (error) {
       console.error('Error in handleSubmit:', error)
@@ -357,6 +359,47 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
             {renderSelect('impact_culture', "To what extent do you feel the organisation is willing to undertake further work around understanding and measuring impact?")}
             {renderSelect('impact_blockers', "To what extent would you agree that your organisation currently has a culture of understanding and measuring impact?")}
             {renderSelect('impact_buy_in', "How easy would it be to achieve buy-in from key people in your organisation to develop impact practices and measure them?")}
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Theory of Change Assessment</h2>
+            {renderSelect('theory_of_change_completeness', "How complete do you believe your theory of change is?")}
+            {renderSelect('theory_of_change_use', "To what extent is your theory of change used to drive the work of your organisation?")}
+            {renderSelect('theory_of_change_willingness', "To what extent do you think your organisation would be willing to revisit your theory of change?")}
+            {renderSelect('theory_of_change_simplicity', "To what extent do you agree that your theory of change is simple and straight forward?")}
+            {renderSelect('theory_of_change_definitions', "To what extent would you agree that the measures in your theory of change are measures of impact and not measures of reach?")}
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Measurement Framework Assessment</h2>
+            {renderSelect('measurement_framework_feasibility', "Is your framework feasible, cost effective, time efficient, resource appropriate and producing good quality, and reliable data?")}
+            {renderSelect('measurement_framework_indicators', "To what extent do you feel you are measuring too many things?")}
+            {renderSelect('measurement_framework_outcomes', "To what extent do you feel that you are collecting only output rather than outcome measures?")}
+            {renderSelect('measurement_framework_validation', "To what extent do you believe your outcomes measures are based on validated scales?")}
+            {renderSelect('measurement_framework_comparison', "To what extent do you feel you can compare your organisations impact to others?")}
+            {renderSelect('measurement_framework_demographics', "To what extent are you able to use demographic measures to assess your reaching your target population?")}
+            {renderSelect('measurement_framework_segmentation', "To what extent are you using factors to interrogate your outcome measures by characteristic?")}
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">Data Assessment</h2>
+            {renderSelect('data_structure', "To what extent do you use defined and structured data fields rather than free text?")}
+            {renderSelect('data_uniqueness', "To what extent are you able to use your data and systems to track participants over time?")}
+            {renderSelect('data_expertise', "To what extent would you describe your staff as 'data savvy'?")}
+            {renderSelect('data_completeness', "How confident are you that you have complete and useful datasets collected from beneficiaries?")}
+            {renderSelect('data_quality', "To what extent is your data quality checked and maintained regularly?")}
+            {renderSelect('data_consistency', "Is data structure and format consistent over time?")}
+            {renderSelect('data_effectiveness', "To what extent do you believe your data is being effectively collected and reported on?")}
+            {renderSelect('data_automaticity', "To what extent is your data capture automated and free from manual processes?")}
+          </div>
+
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold">System Assessment</h2>
+            {renderSelect('system_appropriate', "Is the number of systems being operated appropriate for the organisation?")}
+            {renderSelect('system_fitness', "Are the systems modern and fit for purpose?")}
+            {renderSelect('system_personnel', "Does the organisation have the appropriate personnel and support in place to run their systems?")}
+            {renderSelect('system_customization', "Is it possible for the client to customise impact relevant systems without external support services?")}
+            {renderSelect('system_connectivity', "If applicable, Are your systems able interact with each other?")}
           </div>
 
           <Button 
