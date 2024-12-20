@@ -17,15 +17,21 @@ export default function Login() {
     e.preventDefault()
     setError(null)
 
-    if (username === 'admin' && password === 'password') {
-      router.push('/dashboard')
-    } else {
-      setError('Invalid credentials')
+    try {
+      if (username === 'admin' && password === 'password') {
+        // Add loading state if needed
+        await router.push('/dashboard')
+      } else {
+        setError('Invalid credentials')
+      }
+    } catch (error) {
+      console.error('Navigation error:', error)
+      setError('An error occurred. Please try again.')
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 w-full">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
           <img 
