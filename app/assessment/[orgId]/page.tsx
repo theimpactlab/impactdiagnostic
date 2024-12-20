@@ -227,7 +227,8 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
       const { data, error: submitError } = await supabase
         .from('assessments')
         .upsert(assessmentData, {
-          onConflict: 'organization_id'
+          onConflict: 'organization_id',
+          ignoreDuplicates: false
         })
         .select()
 
