@@ -18,7 +18,6 @@ export default function Login() {
     setError(null)
 
     if (username === 'admin' && password === 'password') {
-      // In a real application, we would call the loginAdmin function here
       router.push('/dashboard')
     } else {
       setError('Invalid credentials')
@@ -26,21 +25,27 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-8">
+        <div className="text-center">
           <img 
             src="https://www.trustimpact.com/wp-content/uploads/2020/09/trust-impact-logo.png" 
             alt="Trust Impact Logo" 
             className="mx-auto h-16"
           />
+          <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+            Impact Diagnostic Assessment Tool
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Please sign in to access the assessment tool
+          </p>
         </div>
-        <Card>
+        <Card className="mt-8 shadow-lg">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold text-center">Login to Impact Assessment Tool</CardTitle>
+            <CardTitle className="text-center">Sign in to your account</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
@@ -63,9 +68,16 @@ export default function Login() {
                   className="w-full"
                 />
               </div>
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              <Button type="submit" className="w-full bg-[#f7d32e] text-black hover:bg-[#e6c41d]">
-                Login
+              {error && (
+                <div className="text-sm text-red-500 text-center">
+                  {error}
+                </div>
+              )}
+              <Button 
+                type="submit" 
+                className="w-full bg-[#f7d32e] text-black hover:bg-[#e6c41d] font-semibold"
+              >
+                Sign in
               </Button>
             </form>
           </CardContent>
