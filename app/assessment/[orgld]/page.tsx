@@ -111,13 +111,14 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
-      const orgId = parseInt(params.orgId, 10)
-      if (isNaN(orgId)) {
-        throw new Error('Invalid organization ID')
+      // Ensure we're working with a valid organization ID
+      if (!params.orgId) {
+        throw new Error('Organization ID is required')
       }
 
-      console.log('Fetching organization data for ID:', orgId)
-      
+      const orgId = parseInt(params.orgId, 10)
+      console.log('Parsed organization ID:', orgId) // Debug log
+
       // First get the organization name
       const { data: orgData, error: orgError } = await supabase
         .from('organizations')
@@ -134,8 +135,6 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         throw new Error('Organization not found')
       }
 
-      console.log('Organization data:', orgData)
-
       // Then get any existing assessment
       const { data: assessmentData, error: assessmentError } = await supabase
         .from('assessments')
@@ -148,8 +147,6 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         console.error('Error fetching assessment:', assessmentError)
         throw new Error('Error fetching assessment data')
       }
-
-      console.log('Assessment data:', assessmentData)
 
       setFormData({
         ...formData,
