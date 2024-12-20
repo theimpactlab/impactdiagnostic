@@ -42,7 +42,7 @@ interface AssessmentFormData {
   data_uniqueness: number | null;
   data_expertise: number | null;
   data_completeness: number | null;
-  data_quality: number | null;
+  data_quality: null;
   data_consistency: number | null;
   data_effectiveness: number | null;
   data_automaticity: number | null;
@@ -178,51 +178,55 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
       console.log('Submitting assessment for organization:', params.orgId)
       console.log('Form data:', formData)
 
+      const assessmentData = {
+        organization_id: parseInt(params.orgId, 10),
+        lead_impact_consultant: formData.lead_impact_consultant,
+        research_consultant: formData.research_consultant,
+        data_consultant: formData.data_consultant,
+        alignment_score: formData.alignment_score,
+        purpose_statement_length: formData.purpose_statement_length,
+        purpose_statement_common_words: formData.purpose_statement_common_words,
+        purpose_statement_uniqueness: formData.purpose_statement_uniqueness,
+        purpose_statement_clarity: formData.purpose_statement_clarity,
+        purpose_statement_focus: formData.purpose_statement_focus,
+        impact_leadership: formData.impact_leadership,
+        impact_appetite: formData.impact_appetite,
+        impact_desire: formData.impact_desire,
+        impact_culture: formData.impact_culture,
+        impact_blockers: formData.impact_blockers,
+        impact_buy_in: formData.impact_buy_in,
+        theory_of_change_completeness: formData.theory_of_change_completeness,
+        theory_of_change_use: formData.theory_of_change_use,
+        theory_of_change_willingness: formData.theory_of_change_willingness,
+        theory_of_change_simplicity: formData.theory_of_change_simplicity,
+        theory_of_change_definitions: formData.theory_of_change_definitions,
+        measurement_framework_feasibility: formData.measurement_framework_feasibility,
+        measurement_framework_indicators: formData.measurement_framework_indicators,
+        measurement_framework_outcomes: formData.measurement_framework_outcomes,
+        measurement_framework_validation: formData.measurement_framework_validation,
+        measurement_framework_comparison: formData.measurement_framework_comparison,
+        measurement_framework_demographics: formData.measurement_framework_demographics,
+        measurement_framework_segmentation: formData.measurement_framework_segmentation,
+        data_structure: formData.data_structure,
+        data_uniqueness: formData.data_uniqueness,
+        data_expertise: formData.data_expertise,
+        data_completeness: formData.data_completeness,
+        data_quality: formData.data_quality,
+        data_consistency: formData.data_consistency,
+        data_effectiveness: formData.data_effectiveness,
+        data_automaticity: formData.data_automaticity,
+        system_appropriate: formData.system_appropriate,
+        system_fitness: formData.system_fitness,
+        system_personnel: formData.system_personnel,
+        system_customization: formData.system_customization,
+        system_connectivity: formData.system_connectivity
+      }
+
+      console.log('Assessment data to be submitted:', assessmentData)
+
       const { data, error: submitError } = await supabase
         .from('assessments')
-        .upsert({
-          organization_id: parseInt(params.orgId, 10),
-          lead_impact_consultant: formData.lead_impact_consultant,
-          research_consultant: formData.research_consultant,
-          data_consultant: formData.data_consultant,
-          alignment_score: formData.alignment_score,
-          purpose_statement_length: formData.purpose_statement_length,
-          purpose_statement_common_words: formData.purpose_statement_common_words,
-          purpose_statement_uniqueness: formData.purpose_statement_uniqueness,
-          purpose_statement_clarity: formData.purpose_statement_clarity,
-          purpose_statement_focus: formData.purpose_statement_focus,
-          impact_leadership: formData.impact_leadership,
-          impact_appetite: formData.impact_appetite,
-          impact_desire: formData.impact_desire,
-          impact_culture: formData.impact_culture,
-          impact_blockers: formData.impact_blockers,
-          impact_buy_in: formData.impact_buy_in,
-          theory_of_change_completeness: formData.theory_of_change_completeness,
-          theory_of_change_use: formData.theory_of_change_use,
-          theory_of_change_willingness: formData.theory_of_change_willingness,
-          theory_of_change_simplicity: formData.theory_of_change_simplicity,
-          theory_of_change_definitions: formData.theory_of_change_definitions,
-          measurement_framework_feasibility: formData.measurement_framework_feasibility,
-          measurement_framework_indicators: formData.measurement_framework_indicators,
-          measurement_framework_outcomes: formData.measurement_framework_outcomes,
-          measurement_framework_validation: formData.measurement_framework_validation,
-          measurement_framework_comparison: formData.measurement_framework_comparison,
-          measurement_framework_demographics: formData.measurement_framework_demographics,
-          measurement_framework_segmentation: formData.measurement_framework_segmentation,
-          data_structure: formData.data_structure,
-          data_uniqueness: formData.data_uniqueness,
-          data_expertise: formData.data_expertise,
-          data_completeness: formData.data_completeness,
-          data_quality: formData.data_quality,
-          data_consistency: formData.data_consistency,
-          data_effectiveness: formData.data_effectiveness,
-          data_automaticity: formData.data_automaticity,
-          system_appropriate: formData.system_appropriate,
-          system_fitness: formData.system_fitness,
-          system_personnel: formData.system_personnel,
-          system_customization: formData.system_customization,
-          system_connectivity: formData.system_connectivity
-        }, {
+        .upsert(assessmentData, {
           onConflict: 'organization_id'
         })
         .select()
@@ -250,6 +254,8 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
       if (JSON.stringify(savedData) !== JSON.stringify(data[0])) {
         console.error('Saved data does not match submitted data')
+        console.error('Saved data:', savedData)
+        console.error('Submitted data:', data[0])
         throw new Error('Saved data does not match submitted data')
       }
 
