@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { supabase } from '@/lib/supabase'
+import { supabase, logSupabaseError } from '@/lib/supabase'
 
 export default function Dashboard() {
   const [organizations, setOrganizations] = useState<any[]>([])
@@ -25,9 +25,9 @@ export default function Dashboard() {
         .from('organizations')
         .select('*')
         .order('created_at', { ascending: false })
-      
+    
       if (error) {
-        console.error('Error fetching organizations:', error)
+        logSupabaseError(error, 'fetchOrganizations')
         throw new Error('Failed to fetch organizations')
       }
 
@@ -56,9 +56,9 @@ export default function Dashboard() {
         .from('organizations')
         .insert([{ name: newOrgName.trim() }])
         .select()
-      
+    
       if (error) {
-        console.error('Error creating organization:', error)
+        logSupabaseError(error, 'createNewOrganization')
         throw new Error('Failed to create organization')
       }
 
