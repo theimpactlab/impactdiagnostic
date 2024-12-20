@@ -265,7 +265,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         throw new Error('Saved data does not match submitted data')
       }
 
-      router.push('/dashboard')
+      router.push(`/assessment/${params.orgId}/results`)
     } catch (error) {
       console.error('Error in handleSubmit:', error)
       setError(error instanceof Error ? error.message : 'Failed to save assessment')
