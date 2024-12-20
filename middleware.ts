@@ -5,13 +5,14 @@ import type { NextRequest } from 'next/server'
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next()
   const supabase = createMiddlewareClient({ req, res })
-  
+
   try {
     const {
       data: { session },
     } = await supabase.auth.getSession()
 
-    if (!session && req.nextUrl.pathname !== '/login') {
+    // Allow access to the home page and login page
+    if (!session && !['/', '/login'].includes(req.nextUrl.pathname)) {
       const redirectUrl = req.nextUrl.clone()
       redirectUrl.pathname = '/login'
       return NextResponse.redirect(redirectUrl)
