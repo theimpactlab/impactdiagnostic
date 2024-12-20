@@ -23,23 +23,28 @@ export default function Dashboard() {
     try {
       const { data, error } = await supabase
         .from('organizations')
-        .select('*')
+        .select(`
+        *,
+        assessments (
+          id
+        )
+      `)
         .order('created_at', { ascending: false })
-    
-      if (error) {
-        logSupabaseError(error, 'fetchOrganizations')
-        throw new Error('Failed to fetch organizations')
-      }
-
-      console.log('Fetched organizations:', data)
-      setOrganizations(data || [])
-    } catch (error) {
-      console.error('Error:', error)
-      setError(error instanceof Error ? error.message : 'An error occurred')
-    } finally {
-      setIsLoading(false)
+  
+    if (error) {
+      logSupabaseError(error, 'fetchOrganizations')
+      throw new Error('Failed to fetch organizations')
     }
+
+    console.log('Fetched organizations:', data)
+    setOrganizations(data || [])
+  } catch (error) {
+    console.error('Error:', error)
+    setError(error instanceof Error ? error.message : 'An error occurred')
+  } finally {
+    setIsLoading(false)
   }
+}
 
   async function createNewOrganization(e: React.FormEvent) {
     e.preventDefault()
@@ -120,12 +125,22 @@ export default function Dashboard() {
                 {organizations.map((org) => (
                   <li key={org.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
                     <span className="font-medium">{org.name}</span>
-                    <Button 
-                      onClick={() => startAssessment(org.id)}
-                      className="bg-[#f7d32e] text-black hover:bg-[#e6c41d]"
-                    >
-                      Start Assessment
-                    </Button>
+                    <div>
+                      {org.assessments && org.assessments.length > 0 ? (
+                        <Button 
+                          onClick={() => router.push(`/assessment/${org.id}/results`)}
+                          className="bg-blue-500 text-white hover:bg-blue-600 mr-2"
+                        >
+                          View Results
+                        </Button>
+                      ) : null}
+                      <Button 
+                        onClick={() => startAssessment(org.id)}
+                        className="bg-[#f7d32e] text-black hover:bg-[#e6c41d]"
+                      >
+                        {org.assessments && org.assessments.length > 0 ? 'Update Assessment' : 'Start Assessment'}
+                      </Button>
+                    </div>
                   </li>
                 ))}
               </ul>
