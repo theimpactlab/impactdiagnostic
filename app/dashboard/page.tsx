@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { supabase } from '@/lib/supabase'
+import { clearAuth } from '@/lib/auth'
 
 export default function Dashboard() {
   const [organizations, setOrganizations] = useState<any[]>([])
@@ -47,10 +48,23 @@ export default function Dashboard() {
     router.push(`/assessment/${orgId}`)
   }
 
+  function handleLogout() {
+    clearAuth()
+    document.cookie = 'auth=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;'
+    window.location.href = '/login'
+  }
+
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Impact Assessment Dashboard</CardTitle>
+        <Button 
+          onClick={handleLogout}
+          variant="outline"
+          className="ml-auto"
+        >
+          Sign out
+        </Button>
       </CardHeader>
       <CardContent>
         <h2 className="text-xl font-semibold mb-4">Existing Organizations</h2>
