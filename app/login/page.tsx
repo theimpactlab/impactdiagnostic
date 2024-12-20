@@ -18,14 +18,15 @@ export default function Login() {
     setError(null)
 
     try {
+      // Check credentials
       if (username === 'admin' && password === 'password') {
-        // Add loading state if needed
-        await router.push('/dashboard')
+        // Force a hard navigation to ensure page reload
+        window.location.href = '/dashboard'
       } else {
         setError('Invalid credentials')
       }
     } catch (error) {
-      console.error('Navigation error:', error)
+      console.error('Login error:', error)
       setError('An error occurred. Please try again.')
     }
   }
