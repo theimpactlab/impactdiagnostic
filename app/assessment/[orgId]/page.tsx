@@ -126,7 +126,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
       if (orgError) {
         console.error('Error fetching organization:', orgError)
-        throw new Error('Organization not found')
+        throw new Error(`Organization not found: ${orgError.message}`)
       }
 
       if (!orgData) {
@@ -143,7 +143,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
       if (assessmentError) {
         console.error('Error fetching assessment:', assessmentError)
-        throw new Error('Error fetching assessment data')
+        throw new Error(`Error fetching assessment data: ${assessmentError.message}`)
       }
 
       console.log('Assessment data:', assessmentData)
@@ -233,7 +233,12 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
       if (submitError) {
         console.error('Error submitting assessment:', submitError)
-        throw new Error('Failed to save assessment')
+        throw new Error(`Failed to save assessment: ${submitError.message}`)
+      }
+
+      if (!data || data.length === 0) {
+        console.error('No data returned after upsert')
+        throw new Error('No data returned after saving assessment')
       }
 
       console.log('Assessment saved successfully:', data)
