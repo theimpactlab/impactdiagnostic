@@ -139,9 +139,9 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         .from('assessments')
         .select('*')
         .eq('organization_id', orgId)
-        .single()
+        .maybeSingle()
 
-      if (assessmentError && assessmentError.code !== 'PGRST116') {
+      if (assessmentError) {
         console.error('Error fetching assessment:', assessmentError)
         throw new Error('Error fetching assessment data')
       }
@@ -222,6 +222,8 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
           system_personnel: formData.system_personnel,
           system_customization: formData.system_customization,
           system_connectivity: formData.system_connectivity
+        }, {
+          onConflict: 'organization_id'
         })
         .select()
 
@@ -231,6 +233,26 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
       }
 
       console.log('Assessment saved successfully:', data)
+      
+      // Fetch the saved data to confirm it's in the database
+      const { data: savedData, error: fetchError } = await supabase
+        .from('assessments')
+        .select('*')
+        .eq('organization_id', params.orgId)
+        .single()
+
+      if (fetchError) {
+        console.error('Error fetching saved assessment:', fetchError)
+        throw new Error('Failed to confirm assessment was saved')
+      }
+
+      console.log('Fetched saved assessment:', savedData)
+
+      if (JSON.stringify(savedData) !== JSON.stringify(data[0])) {
+        console.error('Saved data does not match submitted data')
+        throw new Error('Saved data does not match submitted data')
+      }
+
       router.push('/dashboard')
     } catch (error) {
       console.error('Error in handleSubmit:', error)
