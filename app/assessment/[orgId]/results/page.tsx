@@ -9,6 +9,7 @@ import { supabase } from '@/lib/supabase'
 import { PolarArea } from 'react-chartjs-2'
 import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend } from 'chart.js'
 import { Loader2 } from 'lucide-react'
+import { ChartOptions } from 'chart.js'
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
 
@@ -184,7 +185,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     ],
   }
 
-  const chartOptions = {
+  const chartOptions: ChartOptions<'polarArea'> = {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
@@ -199,8 +200,8 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     plugins: {
       legend: {
         display: true,
-        position: 'top' as const,
-        align: 'center' as const,
+        position: 'top',
+        align: 'center',
         labels: {
           boxWidth: 20,
           padding: 20,
@@ -214,7 +215,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
         text: 'Impact Assessment Results',
         font: {
           size: 20,
-          weight: 'bold'
+          weight: 'bold' as const,
         },
         padding: {
           top: 10,
