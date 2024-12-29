@@ -25,9 +25,13 @@ export function ScoreSelect({ name, label, value, onChange }: ScoreSelectProps) 
             <SelectTrigger id={name} className="w-full bg-white border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
               <SelectValue placeholder="Score" />
             </SelectTrigger>
-            <SelectContent className="bg-white">
+            <SelectContent className="bg-white shadow-lg rounded-md overflow-hidden">
               {[...Array(11)].map((_, i) => (
-                <SelectItem key={i} value={i.toString()} className="cursor-pointer hover:bg-gray-100 bg-white">
+                <SelectItem 
+                  key={i} 
+                  value={i.toString()} 
+                  className="cursor-pointer hover:bg-gray-100 bg-white py-2 px-4"
+                >
                   {i}
                 </SelectItem>
               ))}
