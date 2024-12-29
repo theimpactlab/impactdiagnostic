@@ -77,16 +77,6 @@ export default function Dashboard() {
     }
   }
 
-  function startAssessment(orgId: number) {
-    console.log('Starting assessment for organization:', orgId)
-    router.push(`/assessment/${orgId}`)
-  }
-
-  function viewResults(orgId: number) {
-    console.log('Viewing results for organization:', orgId)
-    router.push(`/assessment/${orgId}/results`)
-  }
-
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
