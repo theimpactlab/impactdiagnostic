@@ -16,43 +16,43 @@ interface AssessmentFormData {
   lead_impact_consultant: string;
   research_consultant: string;
   data_consultant: string;
-  alignment_score: number;
-  purpose_statement_length: number;
-  purpose_statement_common_words: number;
-  purpose_statement_uniqueness: number;
-  purpose_statement_clarity: number;
-  purpose_statement_focus: number;
-  impact_leadership: number;
-  impact_appetite: number;
-  impact_desire: number;
-  impact_culture: number;
-  impact_blockers: number;
-  impact_buy_in: number;
-  theory_of_change_completeness: number;
-  theory_of_change_use: number;
-  theory_of_change_willingness: number;
-  theory_of_change_simplicity: number;
-  theory_of_change_definitions: number;
-  measurement_framework_feasibility: number;
-  measurement_framework_indicators: number;
-  measurement_framework_outcomes: number;
-  measurement_framework_validation: number;
-  measurement_framework_comparison: number;
-  measurement_framework_demographics: number;
-  measurement_framework_segmentation: number;
-  data_structure: number;
-  data_uniqueness: number;
-  data_expertise: number;
-  data_completeness: number;
-  data_quality: number;
-  data_consistency: number;
-  data_effectiveness: number;
-  data_automaticity: number;
-  system_appropriate: number;
-  system_fitness: number;
-  system_personnel: number;
-  system_customization: number;
-  system_connectivity: number;
+  alignment_score: string;
+  purpose_statement_length: string;
+  purpose_statement_common_words: string;
+  purpose_statement_uniqueness: string;
+  purpose_statement_clarity: string;
+  purpose_statement_focus: string;
+  impact_leadership: string;
+  impact_appetite: string;
+  impact_desire: string;
+  impact_culture: string;
+  impact_blockers: string;
+  impact_buy_in: string;
+  theory_of_change_completeness: string;
+  theory_of_change_use: string;
+  theory_of_change_willingness: string;
+  theory_of_change_simplicity: string;
+  theory_of_change_definitions: string;
+  measurement_framework_feasibility: string;
+  measurement_framework_indicators: string;
+  measurement_framework_outcomes: string;
+  measurement_framework_validation: string;
+  measurement_framework_comparison: string;
+  measurement_framework_demographics: string;
+  measurement_framework_segmentation: string;
+  data_structure: string;
+  data_uniqueness: string;
+  data_expertise: string;
+  data_completeness: string;
+  data_quality: string;
+  data_consistency: string;
+  data_effectiveness: string;
+  data_automaticity: string;
+  system_appropriate: string;
+  system_fitness: string;
+  system_personnel: string;
+  system_customization: string;
+  system_connectivity: string;
 }
 
 const initialFormData: AssessmentFormData = {
@@ -60,43 +60,43 @@ const initialFormData: AssessmentFormData = {
   lead_impact_consultant: '',
   research_consultant: '',
   data_consultant: '',
-  alignment_score: 0,
-  purpose_statement_length: 0,
-  purpose_statement_common_words: 0,
-  purpose_statement_uniqueness: 0,
-  purpose_statement_clarity: 0,
-  purpose_statement_focus: 0,
-  impact_leadership: 0,
-  impact_appetite: 0,
-  impact_desire: 0,
-  impact_culture: 0,
-  impact_blockers: 0,
-  impact_buy_in: 0,
-  theory_of_change_completeness: 0,
-  theory_of_change_use: 0,
-  theory_of_change_willingness: 0,
-  theory_of_change_simplicity: 0,
-  theory_of_change_definitions: 0,
-  measurement_framework_feasibility: 0,
-  measurement_framework_indicators: 0,
-  measurement_framework_outcomes: 0,
-  measurement_framework_validation: 0,
-  measurement_framework_comparison: 0,
-  measurement_framework_demographics: 0,
-  measurement_framework_segmentation: 0,
-  data_structure: 0,
-  data_uniqueness: 0,
-  data_expertise: 0,
-  data_completeness: 0,
-  data_quality: 0,
-  data_consistency: 0,
-  data_effectiveness: 0,
-  data_automaticity: 0,
-  system_appropriate: 0,
-  system_fitness: 0,
-  system_personnel: 0,
-  system_customization: 0,
-  system_connectivity: 0,
+  alignment_score: '',
+  purpose_statement_length: '',
+  purpose_statement_common_words: '',
+  purpose_statement_uniqueness: '',
+  purpose_statement_clarity: '',
+  purpose_statement_focus: '',
+  impact_leadership: '',
+  impact_appetite: '',
+  impact_desire: '',
+  impact_culture: '',
+  impact_blockers: '',
+  impact_buy_in: '',
+  theory_of_change_completeness: '',
+  theory_of_change_use: '',
+  theory_of_change_willingness: '',
+  theory_of_change_simplicity: '',
+  theory_of_change_definitions: '',
+  measurement_framework_feasibility: '',
+  measurement_framework_indicators: '',
+  measurement_framework_outcomes: '',
+  measurement_framework_validation: '',
+  measurement_framework_comparison: '',
+  measurement_framework_demographics: '',
+  measurement_framework_segmentation: '',
+  data_structure: '',
+  data_uniqueness: '',
+  data_expertise: '',
+  data_completeness: '',
+  data_quality: '',
+  data_consistency: '',
+  data_effectiveness: '',
+  data_automaticity: '',
+  system_appropriate: '',
+  system_fitness: '',
+  system_personnel: '',
+  system_customization: '',
+  system_connectivity: '',
 };
 
 export default function AssessmentForm({ params }: { params: { orgId: string } }) {
@@ -141,7 +141,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
   }
 
   function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
-    setFormData({ ...formData, [event.target.name]: parseInt(event.target.value) })
+    setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
