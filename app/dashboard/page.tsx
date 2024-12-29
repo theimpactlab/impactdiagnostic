@@ -31,13 +31,18 @@ export default function Dashboard() {
           )
         `)
         .order('created_at', { ascending: false })
-    
+  
       if (error) {
         logSupabaseError(error, 'fetchOrganizations')
         throw new Error('Failed to fetch organizations')
       }
 
-      setOrganizations(data || [])
+      const organizationsWithLatestAssessment = data?.map(org => ({
+        ...org,
+        latestAssessment: org.assessments && org.assessments.length > 0 ? org.assessments[0] : null
+      })) || []
+
+      setOrganizations(organizationsWithLatestAssessment)
     } catch (error) {
       console.error('Error:', error)
       setError(error instanceof Error ? error.message : 'An error occurred')
@@ -119,7 +124,7 @@ export default function Dashboard() {
                     <div className="flex justify-between items-center mb-4">
                       <span className="text-xl font-medium">{org.name}</span>
                       <div className="space-x-2">
-                        {org.assessments && org.assessments.length > 0 ? (
+                        {org.latestAssessment ? (
                           <>
                             <Button 
                               onClick={() => router.push(`/assessment/${org.id}`)}
@@ -144,9 +149,9 @@ export default function Dashboard() {
                         )}
                       </div>
                     </div>
-                    {org.assessments && org.assessments.length > 0 && (
+                    {org.latestAssessment && (
                       <p className="text-sm text-gray-500">
-                        Last updated: {new Date(org.assessments[0].updated_at).toLocaleDateString()}
+                        Last updated: {new Date(org.latestAssessment.updated_at).toLocaleDateString()}
                       </p>
                     )}
                   </li>
