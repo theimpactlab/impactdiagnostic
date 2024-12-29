@@ -26,7 +26,8 @@ export default function Dashboard() {
         .select(`
           *,
           assessments (
-            id
+            id,
+            updated_at
           )
         `)
         .order('created_at', { ascending: false })
@@ -126,26 +127,42 @@ export default function Dashboard() {
             {organizations.length === 0 ? (
               <p className="text-gray-500">No organizations found. Create one above to get started.</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="space-y-4">
                 {organizations.map((org) => (
-                  <li key={org.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                    <span className="font-medium">{org.name}</span>
-                    <div>
-                      {org.assessments && org.assessments.length > 0 ? (
-                        <Button 
-                          onClick={() => viewResults(org.id)}
-                          className="bg-blue-500 text-white hover:bg-blue-600 mr-2"
-                        >
-                          View Results
-                        </Button>
-                      ) : null}
-                      <Button 
-                        onClick={() => startAssessment(org.id)}
-                        className="bg-[#f7d32e] text-black hover:bg-[#e6c41d]"
-                      >
-                        {org.assessments && org.assessments.length > 0 ? 'Update Assessment' : 'Start Assessment'}
-                      </Button>
+                  <li key={org.id} className="bg-white shadow-md rounded-lg p-4">
+                    <div className="flex justify-between items-center mb-4">
+                      <span className="text-xl font-medium">{org.name}</span>
+                      <div className="space-x-2">
+                        {org.assessments && org.assessments.length > 0 ? (
+                          <>
+                            <Button 
+                              onClick={() => router.push(`/assessment/${org.id}`)}
+                              className="bg-blue-500 text-white hover:bg-blue-600"
+                            >
+                              Continue Assessment
+                            </Button>
+                            <Button 
+                              onClick={() => router.push(`/assessment/${org.id}/results`)}
+                              className="bg-green-500 text-white hover:bg-green-600"
+                            >
+                              View Results
+                            </Button>
+                          </>
+                        ) : (
+                          <Button 
+                            onClick={() => router.push(`/assessment/${org.id}`)}
+                            className="bg-indigo-600 text-white hover:bg-indigo-700"
+                          >
+                            Start Assessment
+                          </Button>
+                        )}
+                      </div>
                     </div>
+                    {org.assessments && org.assessments.length > 0 && (
+                      <p className="text-sm text-gray-500">
+                        Last updated: {new Date(org.assessments[0].updated_at).toLocaleDateString()}
+                      </p>
+                    )}
                   </li>
                 ))}
               </ul>
