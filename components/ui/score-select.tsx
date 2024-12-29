@@ -28,13 +28,16 @@ export function ScoreSelect({ name, label, value, onChange }: ScoreSelectProps) 
             {[...Array(11)].map((_, i) => (
               <SelectItem key={i} value={i.toString()} className="cursor-pointer hover:bg-gray-100">
                 <div className="flex items-center justify-between w-full">
-                  <span>{i}</span>
+                  <span className="font-medium">{i}</span>
                   <span className="text-sm text-gray-500">{getScoreDescription(i)}</span>
                 </div>
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+        <p className="text-sm text-gray-500 mt-2">
+          {getScoreExplanation(parseInt(value))}
+        </p>
       </div>
     </Card>
   )
@@ -46,5 +49,14 @@ function getScoreDescription(score: number): string {
   if (score <= 6) return "Average"
   if (score <= 8) return "Good"
   return "Excellent"
+}
+
+function getScoreExplanation(score: number): string {
+  if (score <= 2) return "This area requires immediate attention and substantial improvements."
+  if (score <= 4) return "While there's some progress, this area still needs considerable work."
+  if (score <= 6) return "You're on the right track, but there's room for enhancement."
+  if (score <= 8) return "You're doing well in this area, with some minor improvements possible."
+  if (score > 8) return "You're excelling in this area. Keep up the great work!"
+  return "Select a score to see an explanation."
 }
 
