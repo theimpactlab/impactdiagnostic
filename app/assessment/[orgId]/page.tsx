@@ -169,11 +169,11 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">Loading assessment...</h2>
-          <p className="text-gray-500">Please wait while we fetch the data.</p>
+          <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-indigo-600" />
+          <h2 className="text-2xl font-semibold mb-2 text-gray-800">Loading assessment...</h2>
+          <p className="text-gray-600">Please wait while we fetch the data.</p>
         </div>
       </div>
     )
@@ -181,12 +181,12 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
         <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2 text-red-600">{error}</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-red-600">{error}</h2>
           <Button 
             onClick={() => router.push('/dashboard')} 
-            className="mt-4"
+            className="bg-indigo-600 text-white hover:bg-indigo-700"
           >
             Return to Dashboard
           </Button>
@@ -196,111 +196,115 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
   }
 
   return (
-    <div className="container mx-auto py-8">
-      <Card className="max-w-4xl mx-auto">
-        <CardHeader>
-          <CardTitle>Impact Assessment Form</CardTitle>
-          <CardDescription>Evaluate the impact readiness of your organization</CardDescription>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <Card className="max-w-5xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+        <CardHeader className="bg-indigo-600 text-white p-6">
+          <CardTitle className="text-3xl font-bold">Impact Assessment Form</CardTitle>
+          <CardDescription className="text-indigo-100 mt-2">Evaluate the impact readiness of your organization</CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Tabs defaultValue="organization" className="space-y-4">
-              <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7">
-                <TabsTrigger value="organization">Organization</TabsTrigger>
-                <TabsTrigger value="purpose">Purpose</TabsTrigger>
-                <TabsTrigger value="leadership">Leadership</TabsTrigger>
-                <TabsTrigger value="theory">Theory of Change</TabsTrigger>
-                <TabsTrigger value="measurement">Measurement</TabsTrigger>
-                <TabsTrigger value="data">Data</TabsTrigger>
-                <TabsTrigger value="system">System</TabsTrigger>
+        <CardContent className="p-6">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <Tabs defaultValue="organization" className="space-y-6">
+              <TabsList className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 bg-indigo-100 p-1 rounded-lg">
+                <TabsTrigger value="organization" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Organization</TabsTrigger>
+                <TabsTrigger value="purpose" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Purpose</TabsTrigger>
+                <TabsTrigger value="leadership" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Leadership</TabsTrigger>
+                <TabsTrigger value="theory" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Theory of Change</TabsTrigger>
+                <TabsTrigger value="measurement" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Measurement</TabsTrigger>
+                <TabsTrigger value="data" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">Data</TabsTrigger>
+                <TabsTrigger value="system" className="data-[state=active]:bg-white data-[state=active]:text-indigo-600">System</TabsTrigger>
               </TabsList>
-              <TabsContent value="organization" className="space-y-4">
+              <TabsContent value="organization" className="space-y-6">
                 <Card>
-                  <CardContent className="pt-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="organizationName">Organization Name</Label>
-                      <Input
-                        id="organizationName"
-                        name="organizationName"
-                        value={formData.organizationName}
-                        onChange={handleInputChange}
-                        disabled
-                      />
-                    </div>
-                    <div className="space-y-2 mt-4">
-                      <Label htmlFor="lead_impact_consultant">Lead Impact Consultant</Label>
-                      <Input
-                        id="lead_impact_consultant"
-                        name="lead_impact_consultant"
-                        value={formData.lead_impact_consultant}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2 mt-4">
-                      <Label htmlFor="research_consultant">Research Consultant</Label>
-                      <Input
-                        id="research_consultant"
-                        name="research_consultant"
-                        value={formData.research_consultant}
-                        onChange={handleInputChange}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2 mt-4">
-                      <Label htmlFor="data_consultant">Data Consultant</Label>
-                      <Input
-                        id="data_consultant"
-                        name="data_consultant"
-                        value={formData.data_consultant}
-                        onChange={handleInputChange}
-                        required
-                      />
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div>
+                        <Label htmlFor="organizationName" className="text-lg font-medium text-gray-900">Organization Name</Label>
+                        <Input
+                          id="organizationName"
+                          name="organizationName"
+                          value={formData.organizationName}
+                          onChange={handleInputChange}
+                          disabled
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="lead_impact_consultant" className="text-lg font-medium text-gray-900">Lead Impact Consultant</Label>
+                        <Input
+                          id="lead_impact_consultant"
+                          name="lead_impact_consultant"
+                          value={formData.lead_impact_consultant}
+                          onChange={handleInputChange}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="research_consultant" className="text-lg font-medium text-gray-900">Research Consultant</Label>
+                        <Input
+                          id="research_consultant"
+                          name="research_consultant"
+                          value={formData.research_consultant}
+                          onChange={handleInputChange}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="data_consultant" className="text-lg font-medium text-gray-900">Data Consultant</Label>
+                        <Input
+                          id="data_consultant"
+                          name="data_consultant"
+                          value={formData.data_consultant}
+                          onChange={handleInputChange}
+                          required
+                          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                        />
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </TabsContent>
-              <TabsContent value="purpose" className="space-y-4">
-                <div className="grid grid-cols-1 gap-4">
-                  <ScoreSelect
-                    name="alignment_score"
-                    label="What was your team's alignment to purpose score?"
-                    value={formData.alignment_score}
-                    onChange={handleSelectChange}
-                  />
-                  <ScoreSelect
-                    name="purpose_statement_length"
-                    label="To what extent is your purpose statement succinct?"
-                    value={formData.purpose_statement_length}
-                    onChange={handleSelectChange}
-                  />
-                  <ScoreSelect
-                    name="purpose_statement_common_words"
-                    label="How prevalent are common words in your purpose statement?"
-                    value={formData.purpose_statement_common_words}
-                    onChange={handleSelectChange}
-                  />
-                  <ScoreSelect
-                    name="purpose_statement_uniqueness"
-                    label="To what extent do you feel your purpose statement is unique to your organisation?"
-                    value={formData.purpose_statement_uniqueness}
-                    onChange={handleSelectChange}
-                  />
-                  <ScoreSelect
-                    name="purpose_statement_clarity"
-                    label="How clear is your purpose statement?"
-                    value={formData.purpose_statement_clarity}
-                    onChange={handleSelectChange}
-                  />
-                  <ScoreSelect
-                    name="purpose_statement_focus"
-                    label="How focussed is your purpose statement?"
-                    value={formData.purpose_statement_focus}
-                    onChange={handleSelectChange}
-                  />
-                </div>
+              <TabsContent value="purpose" className="space-y-6">
+                <ScoreSelect
+                  name="alignment_score"
+                  label="What was your team's alignment to purpose score?"
+                  value={formData.alignment_score}
+                  onChange={handleSelectChange}
+                />
+                <ScoreSelect
+                  name="purpose_statement_length"
+                  label="To what extent is your purpose statement succinct?"
+                  value={formData.purpose_statement_length}
+                  onChange={handleSelectChange}
+                />
+                <ScoreSelect
+                  name="purpose_statement_common_words"
+                  label="How prevalent are common words in your purpose statement?"
+                  value={formData.purpose_statement_common_words}
+                  onChange={handleSelectChange}
+                />
+                <ScoreSelect
+                  name="purpose_statement_uniqueness"
+                  label="To what extent do you feel your purpose statement is unique to your organisation?"
+                  value={formData.purpose_statement_uniqueness}
+                  onChange={handleSelectChange}
+                />
+                <ScoreSelect
+                  name="purpose_statement_clarity"
+                  label="How clear is your purpose statement?"
+                  value={formData.purpose_statement_clarity}
+                  onChange={handleSelectChange}
+                />
+                <ScoreSelect
+                  name="purpose_statement_focus"
+                  label="How focussed is your purpose statement?"
+                  value={formData.purpose_statement_focus}
+                  onChange={handleSelectChange}
+                />
               </TabsContent>
-              <TabsContent value="leadership" className="space-y-4">
+              <TabsContent value="leadership" className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="impact_leadership"
@@ -340,7 +344,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   />
                 </div>
               </TabsContent>
-              <TabsContent value="theory" className="space-y-4">
+              <TabsContent value="theory" className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="theory_of_change_completeness"
@@ -374,7 +378,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   />
                 </div>
               </TabsContent>
-              <TabsContent value="measurement" className="space-y-4">
+              <TabsContent value="measurement" className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="measurement_framework_feasibility"
@@ -420,7 +424,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   />
                 </div>
               </TabsContent>
-              <TabsContent value="data" className="space-y-4">
+              <TabsContent value="data" className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="data_structure"
@@ -472,7 +476,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   />
                 </div>
               </TabsContent>
-              <TabsContent value="system" className="space-y-4">
+              <TabsContent value="system" className="space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="system_appropriate"
@@ -507,17 +511,18 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
             </Tabs>
-            <div className="flex justify-between">
+            <div className="flex justify-between pt-6 border-t border-gray-200">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => router.push('/dashboard')}
+                className="bg-white text-indigo-600 border-indigo-600 hover:bg-indigo-50"
               >
                 Cancel
               </Button>
               <Button 
                 type="submit" 
-                className="bg-[#f7d32e] text-black hover:bg-[#e6c41d] font-semibold"
+                className="bg-indigo-600 text-white hover:bg-indigo-700"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Saving...' : 'Save Assessment'}
