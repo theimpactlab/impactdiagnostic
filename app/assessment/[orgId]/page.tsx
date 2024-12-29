@@ -11,12 +11,161 @@ import { ScoreSelect } from "@/components/ui/score-select"
 import { supabase } from '@/lib/supabase'
 import { Loader2 } from 'lucide-react'
 
-// ... (keep the AssessmentFormData interface and initialFormData as they were)
+interface AssessmentFormData {
+  organizationName: string;
+  lead_impact_consultant: string;
+  research_consultant: string;
+  data_consultant: string;
+  alignment_score: number;
+  purpose_statement_length: number;
+  purpose_statement_common_words: number;
+  purpose_statement_uniqueness: number;
+  purpose_statement_clarity: number;
+  purpose_statement_focus: number;
+  impact_leadership: number;
+  impact_appetite: number;
+  impact_desire: number;
+  impact_culture: number;
+  impact_blockers: number;
+  impact_buy_in: number;
+  theory_of_change_completeness: number;
+  theory_of_change_use: number;
+  theory_of_change_willingness: number;
+  theory_of_change_simplicity: number;
+  theory_of_change_definitions: number;
+  measurement_framework_feasibility: number;
+  measurement_framework_indicators: number;
+  measurement_framework_outcomes: number;
+  measurement_framework_validation: number;
+  measurement_framework_comparison: number;
+  measurement_framework_demographics: number;
+  measurement_framework_segmentation: number;
+  data_structure: number;
+  data_uniqueness: number;
+  data_expertise: number;
+  data_completeness: number;
+  data_quality: number;
+  data_consistency: number;
+  data_effectiveness: number;
+  data_automaticity: number;
+  system_appropriate: number;
+  system_fitness: number;
+  system_personnel: number;
+  system_customization: number;
+  system_connectivity: number;
+}
+
+const initialFormData: AssessmentFormData = {
+  organizationName: '',
+  lead_impact_consultant: '',
+  research_consultant: '',
+  data_consultant: '',
+  alignment_score: 0,
+  purpose_statement_length: 0,
+  purpose_statement_common_words: 0,
+  purpose_statement_uniqueness: 0,
+  purpose_statement_clarity: 0,
+  purpose_statement_focus: 0,
+  impact_leadership: 0,
+  impact_appetite: 0,
+  impact_desire: 0,
+  impact_culture: 0,
+  impact_blockers: 0,
+  impact_buy_in: 0,
+  theory_of_change_completeness: 0,
+  theory_of_change_use: 0,
+  theory_of_change_willingness: 0,
+  theory_of_change_simplicity: 0,
+  theory_of_change_definitions: 0,
+  measurement_framework_feasibility: 0,
+  measurement_framework_indicators: 0,
+  measurement_framework_outcomes: 0,
+  measurement_framework_validation: 0,
+  measurement_framework_comparison: 0,
+  measurement_framework_demographics: 0,
+  measurement_framework_segmentation: 0,
+  data_structure: 0,
+  data_uniqueness: 0,
+  data_expertise: 0,
+  data_completeness: 0,
+  data_quality: 0,
+  data_consistency: 0,
+  data_effectiveness: 0,
+  data_automaticity: 0,
+  system_appropriate: 0,
+  system_fitness: 0,
+  system_personnel: 0,
+  system_customization: 0,
+  system_connectivity: 0,
+};
 
 export default function AssessmentForm({ params }: { params: { orgId: string } }) {
-  // ... (keep the existing state and effect hooks)
+  const router = useRouter()
+  const [formData, setFormData] = useState<AssessmentFormData>(initialFormData)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  // ... (keep the existing handleInputChange, handleSelectChange, and handleSubmit functions)
+  useEffect(() => {
+    fetchAssessmentData()
+  }, [])
+
+  async function fetchAssessmentData() {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { data, error } = await supabase
+        .from('assessments')
+        .select('*')
+        .eq('organization_id', params.orgId)
+        .single()
+
+      if (error) {
+        throw error
+      }
+
+      if (data) {
+        setFormData(data)
+      }
+    } catch (error) {
+      console.error('Error in fetchAssessmentData:', error)
+      setError(error instanceof Error ? error.message : 'Failed to load assessment data')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setFormData({ ...formData, [event.target.name]: event.target.value })
+  }
+
+  function handleSelectChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setFormData({ ...formData, [event.target.name]: parseInt(event.target.value) })
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase
+        .from('assessments')
+        .upsert(formData)
+
+      if (error) {
+        throw error
+      }
+
+      router.push('/dashboard')
+    } catch (error) {
+      console.error('Error in handleSubmit:', error)
+      setError(error instanceof Error ? error.message : 'Failed to save assessment data')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
 
   if (isLoading) {
     return (
