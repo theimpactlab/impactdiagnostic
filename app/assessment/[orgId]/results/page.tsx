@@ -199,19 +199,27 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     plugins: {
       legend: {
         display: true,
-        position: 'left' as const,
-        align: 'start' as const,
+        position: 'top' as const,
+        align: 'center' as const,
         labels: {
           boxWidth: 20,
           padding: 20,
+          font: {
+            size: 14
+          }
         },
       },
       title: {
         display: true,
         text: 'Impact Assessment Results',
         font: {
-          size: 18,
+          size: 20,
+          weight: 'bold'
         },
+        padding: {
+          top: 10,
+          bottom: 30
+        }
       },
       tooltip: {
         callbacks: {
@@ -221,11 +229,6 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             return `${label}: ${value.toFixed(2)}`
           },
         },
-      },
-    },
-    layout: {
-      padding: {
-        left: 100, // Adjust this value to create space for the legend
       },
     },
   }
@@ -260,30 +263,30 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   return (
     <div className="container mx-auto py-8">
-      <Card className="max-w-4xl mx-auto">
+      <Card className="max-w-5xl mx-auto">
         <CardHeader>
-          <CardTitle className="text-2xl">Assessment Results for {organizationName}</CardTitle>
-          <CardDescription>Review your organization's performance across key areas</CardDescription>
+          <CardTitle className="text-3xl text-center">Assessment Results for {organizationName}</CardTitle>
+          <CardDescription className="text-center text-lg mt-2">Review your organization's performance across key areas</CardDescription>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="summary" className="space-y-4">
-            <TabsList>
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="chart">Chart</TabsTrigger>
-              <TabsTrigger value="details">Detailed Scores</TabsTrigger>
+          <Tabs defaultValue="summary" className="space-y-6">
+            <TabsList className="flex justify-center">
+              <TabsTrigger value="summary" className="px-6 py-2">Summary</TabsTrigger>
+              <TabsTrigger value="chart" className="px-6 py-2">Chart</TabsTrigger>
+              <TabsTrigger value="details" className="px-6 py-2">Detailed Scores</TabsTrigger>
             </TabsList>
             <TabsContent value="summary">
-              <div className="space-y-4">
-                <div className="text-center p-4 bg-gray-100 rounded-lg">
-                  <h2 className="text-2xl font-bold pb-2 mb-2 border-b-2 border-gray-300">Summary</h2>
-                  <p className="text-4xl font-bold text-blue-600">{overallAverage.toFixed(2)}</p>
-                  <p className="text-lg text-gray-600">{getScoreDescription(overallAverage)}</p>
+              <div className="space-y-6">
+                <div className="text-center p-6 bg-gray-100 rounded-lg shadow-inner">
+                  <h2 className="text-2xl font-bold pb-3 mb-3 border-b-2 border-gray-300">Overall Summary</h2>
+                  <p className="text-5xl font-bold text-blue-600 mb-2">{overallAverage.toFixed(2)}</p>
+                  <p className="text-xl text-gray-600">{getScoreDescription(overallAverage)}</p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {Object.entries(scoreSummary).map(([section, score]) => (
-                    <Card key={section} className="p-4">
-                      <h3 className="text-lg font-semibold">{section}</h3>
-                      <p className="text-3xl font-bold" style={{color: determineBackgroundColor(score)}}>{score.toFixed(2)}</p>
+                    <Card key={section} className="p-4 hover:shadow-lg transition-shadow duration-300">
+                      <h3 className="text-lg font-semibold mb-2">{section}</h3>
+                      <p className="text-3xl font-bold mb-1" style={{color: determineBackgroundColor(score)}}>{score.toFixed(2)}</p>
                       <p className="text-sm text-gray-600">{getScoreDescription(score)}</p>
                     </Card>
                   ))}
@@ -292,24 +295,22 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             </TabsContent>
             <TabsContent value="chart">
               <div className="space-y-8">
-                <h2 className="text-2xl font-bold text-center">Impact Assessment Chart</h2>
-                <div className="chart-container" style={{ height: '600px', width: '100%' }}>
+                <div className="chart-container mx-auto" style={{ height: '600px', maxWidth: '800px' }}>
                   <PolarArea data={chartData} options={chartOptions} />
                 </div>
-                <h2 className="text-2xl font-bold text-center mt-8">Section Scores Summary</h2>
                 <div className="overflow-x-auto">
-                  <table className="min-w-full bg-white border border-gray-300">
+                  <table className="min-w-full bg-white border border-gray-300 shadow-sm rounded-lg overflow-hidden">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="py-2 px-4 border-b border-r text-left">Section</th>
-                        <th className="py-2 px-4 border-b text-left">Score</th>
+                        <th className="py-3 px-4 border-b border-r text-left font-semibold text-gray-600">Section</th>
+                        <th className="py-3 px-4 border-b text-left font-semibold text-gray-600">Score</th>
                       </tr>
                     </thead>
                     <tbody>
                       {Object.entries(scoreSummary).map(([section, score], index) => (
                         <tr key={section} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                          <td className="py-2 px-4 border-b border-r">{section}</td>
-                          <td className="py-2 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>
+                          <td className="py-3 px-4 border-b border-r">{section}</td>
+                          <td className="py-3 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>
                             {score.toFixed(2)}
                           </td>
                         </tr>
@@ -322,23 +323,25 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             <TabsContent value="details">
               <div className="space-y-4">
                 {results && Object.entries(results).map(([key, value]) => (
-                  <div key={key} className="border-b pb-2">
-                    <h3 className="text-lg font-semibold">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
-                    <p>{value}</p>
+                  <div key={key} className="border-b pb-3">
+                    <h3 className="text-lg font-semibold mb-1">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                    <p className="text-gray-700">{value}</p>
                   </div>
                 ))}
               </div>
             </TabsContent>
           </Tabs>
-          <div className="mt-6 flex justify-between">
+          <div className="mt-8 flex justify-between">
             <Button 
               onClick={() => router.push('/dashboard')} 
               variant="outline"
+              className="px-6 py-2 text-lg"
             >
               Return to Dashboard
             </Button>
             <Button 
               onClick={() => router.push(`/assessment/${params.orgId}`)}
+              className="px-6 py-2 text-lg bg-blue-600 hover:bg-blue-700 text-white"
             >
               Update Assessment
             </Button>
