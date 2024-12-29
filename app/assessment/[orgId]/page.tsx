@@ -11,212 +11,12 @@ import { ScoreSelect } from "@/components/ui/score-select"
 import { supabase } from '@/lib/supabase'
 import { Loader2 } from 'lucide-react'
 
-interface AssessmentFormData {
-  organizationName: string;
-  lead_impact_consultant: string;
-  research_consultant: string;
-  data_consultant: string;
-  alignment_score: string;
-  purpose_statement_length: string;
-  purpose_statement_common_words: string;
-  purpose_statement_uniqueness: string;
-  purpose_statement_clarity: string;
-  purpose_statement_focus: string;
-  impact_leadership: string;
-  impact_appetite: string;
-  impact_desire: string;
-  impact_culture: string;
-  impact_blockers: string;
-  impact_buy_in: string;
-  theory_of_change_completeness: string;
-  theory_of_change_use: string;
-  theory_of_change_willingness: string;
-  theory_of_change_simplicity: string;
-  theory_of_change_definitions: string;
-  measurement_framework_feasibility: string;
-  measurement_framework_indicators: string;
-  measurement_framework_outcomes: string;
-  measurement_framework_validation: string;
-  measurement_framework_comparison: string;
-  measurement_framework_demographics: string;
-  measurement_framework_segmentation: string;
-  data_structure: string;
-  data_uniqueness: string;
-  data_expertise: string;
-  data_completeness: string;
-  data_quality: string;
-  data_consistency: string;
-  data_effectiveness: string;
-  data_automaticity: string;
-  system_appropriate: string;
-  system_fitness: string;
-  system_personnel: string;
-  system_customization: string;
-  system_connectivity: string;
-}
-
-const initialFormData: AssessmentFormData = {
-  organizationName: '',
-  lead_impact_consultant: '',
-  research_consultant: '',
-  data_consultant: '',
-  alignment_score: '',
-  purpose_statement_length: '',
-  purpose_statement_common_words: '',
-  purpose_statement_uniqueness: '',
-  purpose_statement_clarity: '',
-  purpose_statement_focus: '',
-  impact_leadership: '',
-  impact_appetite: '',
-  impact_desire: '',
-  impact_culture: '',
-  impact_blockers: '',
-  impact_buy_in: '',
-  theory_of_change_completeness: '',
-  theory_of_change_use: '',
-  theory_of_change_willingness: '',
-  theory_of_change_simplicity: '',
-  theory_of_change_definitions: '',
-  measurement_framework_feasibility: '',
-  measurement_framework_indicators: '',
-  measurement_framework_outcomes: '',
-  measurement_framework_validation: '',
-  measurement_framework_comparison: '',
-  measurement_framework_demographics: '',
-  measurement_framework_segmentation: '',
-  data_structure: '',
-  data_uniqueness: '',
-  data_expertise: '',
-  data_completeness: '',
-  data_quality: '',
-  data_consistency: '',
-  data_effectiveness: '',
-  data_automaticity: '',
-  system_appropriate: '',
-  system_fitness: '',
-  system_personnel: '',
-  system_customization: '',
-  system_connectivity: '',
-}
+// ... (keep the AssessmentFormData interface and initialFormData as they were)
 
 export default function AssessmentForm({ params }: { params: { orgId: string } }) {
-  const router = useRouter()
-  const [formData, setFormData] = useState<AssessmentFormData>(initialFormData)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  // ... (keep the existing state and effect hooks)
 
-  useEffect(() => {
-    fetchAssessmentData()
-  }, [params.orgId])
-
-  async function fetchAssessmentData() {
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const orgId = parseInt(params.orgId, 10)
-      if (isNaN(orgId)) {
-        throw new Error('Invalid organization ID')
-      }
-
-      console.log('Fetching organization data for ID:', orgId)
-      
-      const { data: orgData, error: orgError } = await supabase
-        .from('organizations')
-        .select('*')
-        .eq('id', orgId)
-        .single()
-
-      if (orgError) {
-        console.error('Error fetching organization:', orgError)
-        throw new Error(`Organization not found: ${orgError.message}`)
-      }
-
-      if (!orgData) {
-        throw new Error('Organization not found')
-      }
-
-      console.log('Organization data:', orgData)
-
-      const { data: assessmentData, error: assessmentError } = await supabase
-        .from('assessments')
-        .select('*')
-        .eq('organization_id', orgId)
-        .maybeSingle()
-
-      if (assessmentError) {
-        console.error('Error fetching assessment:', assessmentError)
-        throw new Error(`Error fetching assessment data: ${assessmentError.message}`)
-      }
-
-      console.log('Assessment data:', assessmentData)
-
-      setFormData({
-        ...initialFormData,
-        organizationName: orgData.name,
-        ...(assessmentData || {})
-      })
-    } catch (error) {
-      console.error('Error in fetchAssessmentData:', error)
-      setError(error instanceof Error ? error.message : 'Failed to load assessment data')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
-  }
-
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData({ ...formData, [name]: value })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    setError(null)
-
-    try {
-      console.log('Submitting assessment for organization:', params.orgId)
-      console.log('Form data:', formData)
-
-      const assessmentData = {
-        organization_id: parseInt(params.orgId, 10),
-        ...formData
-      }
-
-      console.log('Assessment data to be submitted:', assessmentData)
-
-      const { data, error: submitError } = await supabase
-        .from('assessments')
-        .upsert(assessmentData, {
-          onConflict: 'organization_id',
-          ignoreDuplicates: false
-        })
-        .select()
-
-      if (submitError) {
-        console.error('Error submitting assessment:', submitError)
-        throw new Error(`Failed to save assessment: ${submitError.message}`)
-      }
-
-      if (!data || data.length === 0) {
-        console.error('No data returned after upsert')
-        throw new Error('No data returned after saving assessment')
-      }
-
-      console.log('Assessment saved successfully:', data)
-      
-      router.push(`/assessment/${params.orgId}/results`)
-    } catch (error) {
-      console.error('Error in handleSubmit:', error)
-      setError(error instanceof Error ? error.message : 'Failed to save assessment')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
+  // ... (keep the existing handleInputChange, handleSelectChange, and handleSubmit functions)
 
   if (isLoading) {
     return (
@@ -266,49 +66,53 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 <TabsTrigger value="system">System</TabsTrigger>
               </TabsList>
               <TabsContent value="organization" className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="organizationName">Organization Name</Label>
-                  <Input
-                    id="organizationName"
-                    name="organizationName"
-                    value={formData.organizationName}
-                    onChange={handleInputChange}
-                    disabled
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="lead_impact_consultant">Lead Impact Consultant</Label>
-                  <Input
-                    id="lead_impact_consultant"
-                    name="lead_impact_consultant"
-                    value={formData.lead_impact_consultant}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="research_consultant">Research Consultant</Label>
-                  <Input
-                    id="research_consultant"
-                    name="research_consultant"
-                    value={formData.research_consultant}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="data_consultant">Data Consultant</Label>
-                  <Input
-                    id="data_consultant"
-                    name="data_consultant"
-                    value={formData.data_consultant}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="organizationName">Organization Name</Label>
+                      <Input
+                        id="organizationName"
+                        name="organizationName"
+                        value={formData.organizationName}
+                        onChange={handleInputChange}
+                        disabled
+                      />
+                    </div>
+                    <div className="space-y-2 mt-4">
+                      <Label htmlFor="lead_impact_consultant">Lead Impact Consultant</Label>
+                      <Input
+                        id="lead_impact_consultant"
+                        name="lead_impact_consultant"
+                        value={formData.lead_impact_consultant}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2 mt-4">
+                      <Label htmlFor="research_consultant">Research Consultant</Label>
+                      <Input
+                        id="research_consultant"
+                        name="research_consultant"
+                        value={formData.research_consultant}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2 mt-4">
+                      <Label htmlFor="data_consultant">Data Consultant</Label>
+                      <Input
+                        id="data_consultant"
+                        name="data_consultant"
+                        value={formData.data_consultant}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
               <TabsContent value="purpose" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="alignment_score"
                     label="What was your team's alignment to purpose score?"
@@ -348,7 +152,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
               <TabsContent value="leadership" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="impact_leadership"
                     label="To what extent would you agree that impact is led from the top of your organisation?"
@@ -388,7 +192,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
               <TabsContent value="theory" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="theory_of_change_completeness"
                     label="How complete do you believe your theory of change is?"
@@ -422,7 +226,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
               <TabsContent value="measurement" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="measurement_framework_feasibility"
                     label="Is your framework feasible, cost effective, time efficient, resource appropriate and producing good quality, and reliable data?"
@@ -468,7 +272,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
               <TabsContent value="data" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="data_structure"
                     label="To what extent do you use defined and structured data fields rather than free text?"
@@ -520,7 +324,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                 </div>
               </TabsContent>
               <TabsContent value="system" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 gap-4">
                   <ScoreSelect
                     name="system_appropriate"
                     label="Is the number of systems being operated appropriate for the organisation?"
