@@ -121,32 +121,27 @@ export default function Dashboard() {
               <ul className="space-y-4">
                 {organizations.map((org) => (
                   <li key={org.id} className="bg-white shadow-md rounded-lg p-4">
-                    <div className="flex justify-between items-center mb-4">
-                      <span className="text-xl font-medium">{org.name}</span>
-                      <div className="space-x-2">
-                        {org.latestAssessment ? (
-                          <>
-                            <Button 
-                              onClick={() => router.push(`/assessment/${org.id}`)}
-                              className="bg-blue-500 text-white hover:bg-blue-600"
-                            >
-                              Continue Assessment
-                            </Button>
-                            <Button 
-                              onClick={() => router.push(`/assessment/${org.id}/results`)}
-                              className="bg-green-500 text-white hover:bg-green-600"
-                            >
-                              View Results
-                            </Button>
-                          </>
-                        ) : (
-                          <Button 
-                            onClick={() => router.push(`/assessment/${org.id}`)}
-                            className="bg-indigo-600 text-white hover:bg-indigo-700"
-                          >
-                            Start Assessment
-                          </Button>
-                        )}
+                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                      <span className="text-xl font-medium mb-2 sm:mb-0">{org.name}</span>
+                      <div className="flex flex-wrap gap-2">
+                        <Button 
+                          onClick={() => router.push(`/assessment/${org.id}`)}
+                          className="bg-blue-500 text-white hover:bg-blue-600"
+                        >
+                          {org.latestAssessment ? 'Continue Assessment' : 'Start Assessment'}
+                        </Button>
+                        <Button 
+                          onClick={() => router.push(`/assessment/${org.id}/results`)}
+                          className="bg-green-500 text-white hover:bg-green-600"
+                        >
+                          View Results
+                        </Button>
+                        <Button 
+                          onClick={() => router.push(`/assessment/${org.id}`)}
+                          className="bg-indigo-600 text-white hover:bg-indigo-700"
+                        >
+                          New Assessment
+                        </Button>
                       </div>
                     </div>
                     {org.latestAssessment && (
