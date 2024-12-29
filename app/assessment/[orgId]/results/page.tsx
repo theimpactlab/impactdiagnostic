@@ -188,14 +188,22 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     },
     plugins: {
       legend: {
-        display: false,
+        display: true,
+        position: 'bottom' as const,
+      },
+      title: {
+        display: true,
+        text: 'Impact Assessment Results',
+        font: {
+          size: 18,
+        },
       },
       tooltip: {
         callbacks: {
           label: function (context: any) {
             let label = context.label || ''
             let value = context.raw || 0
-            return `${label}: ${value}`
+            return `${label}: ${value.toFixed(2)}`
           },
         },
       },
@@ -263,8 +271,30 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
               </div>
             </TabsContent>
             <TabsContent value="chart">
-              <div className="chart-container" style={{ height: '400px' }}>
-                <PolarArea data={chartData} options={chartOptions} />
+              <div className="space-y-8">
+                <div className="chart-container" style={{ height: '400px' }}>
+                  <PolarArea data={chartData} options={chartOptions} />
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full bg-white border border-gray-300">
+                    <thead>
+                      <tr className="bg-gray-100">
+                        <th className="py-2 px-4 border-b text-left">Section</th>
+                        <th className="py-2 px-4 border-b text-left">Score</th>
+                        <th className="py-2 px-4 border-b text-left">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(scoreSummary).map(([section, score]) => (
+                        <tr key={section} className="hover:bg-gray-50">
+                          <td className="py-2 px-4 border-b">{section}</td>
+                          <td className="py-2 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>{score.toFixed(2)}</td>
+                          <td className="py-2 px-4 border-b">{getScoreDescription(score)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </TabsContent>
             <TabsContent value="details">
