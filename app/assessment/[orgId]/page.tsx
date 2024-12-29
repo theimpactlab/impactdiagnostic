@@ -267,7 +267,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   </CardContent>
                 </Card>
               </TabsContent>
-              <TabsContent value="purpose" className="space-y-6">
+              <TabsContent value="purpose" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="alignment_score"
                   label="What was your team'salignment to purpose score?"
@@ -305,7 +305,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   onChange={handleSelectChange}
                 />
               </TabsContent>
-              <TabsContent value="leadership" className="space-y-6">
+              <TabsContent value="leadership" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="impact_leadership"
                   label="To what extent would you agree that impact is led from the top of your organisation?"
@@ -343,7 +343,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   onChange={handleSelectChange}
                 />
               </TabsContent>
-              <TabsContent value="theory" className="space-y-6">
+              <TabsContent value="theory" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="theory_of_change_completeness"
                   label="How complete do you believe your theory of change is?"
@@ -375,7 +375,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   onChange={handleSelectChange}
                 />
               </TabsContent>
-              <TabsContent value="measurement" className="space-y-6">
+              <TabsContent value="measurement" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="measurement_framework_feasibility"
                   label="Is your framework feasible, cost effective, time efficient, resource appropriate and producing good quality, and reliable data?"
@@ -419,7 +419,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   onChange={handleSelectChange}
                 />
               </TabsContent>
-              <TabsContent value="data" className="space-y-6">
+              <TabsContent value="data" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="data_structure"
                   label="To what extent do you use defined and structured data fields rather than free text?"
@@ -469,7 +469,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   onChange={handleSelectChange}
                 />
               </TabsContent>
-              <TabsContent value="system" className="space-y-6">
+              <TabsContent value="system" className="space-y-6 max-w-4xl mx-auto">
                 <ScoreSelect
                   name="system_appropriate"
                   label="Is the number of systems being operated appropriate for the organisation?"
