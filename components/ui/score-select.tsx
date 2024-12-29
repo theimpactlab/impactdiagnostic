@@ -11,13 +11,15 @@ interface ScoreSelectProps {
 
 export function ScoreSelect({ name, label, value, onChange }: ScoreSelectProps) {
   return (
-    <div className="space-y-2">
-      <Label htmlFor={name}>{label}</Label>
+    <div className="space-y-2 w-full">
+      <Label htmlFor={name} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+        {label}
+      </Label>
       <Select
         value={value}
         onValueChange={(value) => onChange(name, value)}
       >
-        <SelectTrigger id={name}>
+        <SelectTrigger id={name} className="w-full">
           <SelectValue placeholder="Select a score" />
         </SelectTrigger>
         <SelectContent>
