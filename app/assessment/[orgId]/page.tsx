@@ -141,7 +141,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
   }
 
   function handleSelectChange(name: string, value: string) {
-    setFormData({ ...formData, [name]: value })
+    setFormData(prevData => ({ ...prevData, [name]: value }))
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -266,37 +266,37 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="alignment_score"
                     label="What was your team's alignment to purpose score?"
                     value={formData.alignment_score}
-                    onChange={(e) => handleSelectChange("alignment_score", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="purpose_statement_length"
                     label="To what extent is your purpose statement succinct?"
                     value={formData.purpose_statement_length}
-                    onChange={(e) => handleSelectChange("purpose_statement_length", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="purpose_statement_common_words"
                     label="How prevalent are common words in your purpose statement?"
                     value={formData.purpose_statement_common_words}
-                    onChange={(e) => handleSelectChange("purpose_statement_common_words", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="purpose_statement_uniqueness"
                     label="To what extent do you feel your purpose statement is unique to your organisation?"
                     value={formData.purpose_statement_uniqueness}
-                    onChange={(e) => handleSelectChange("purpose_statement_uniqueness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="purpose_statement_clarity"
                     label="How clear is your purpose statement?"
                     value={formData.purpose_statement_clarity}
-                    onChange={(e) => handleSelectChange("purpose_statement_clarity", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="purpose_statement_focus"
                     label="How focussed is your purpose statement?"
                     value={formData.purpose_statement_focus}
-                    onChange={(e) => handleSelectChange("purpose_statement_focus", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
@@ -306,37 +306,37 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="impact_leadership"
                     label="To what extent would you agree that impact is led from the top of your organisation?"
                     value={formData.impact_leadership}
-                    onChange={(e) => handleSelectChange("impact_leadership", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="impact_appetite"
                     label="To what extent do you agree that people in your organisation are excited about delivering social impact?"
                     value={formData.impact_appetite}
-                    onChange={(e) => handleSelectChange("impact_appetite", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="impact_desire"
                     label="To what extent would you agree work around understanding and measuring impact has been successfully undertaken in the organisation?"
                     value={formData.impact_desire}
-                    onChange={(e) => handleSelectChange("impact_desire", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="impact_culture"
                     label="To what extent do you feel the organisation is willing to undertake further work around understanding and measuring impact?"
                     value={formData.impact_culture}
-                    onChange={(e) => handleSelectChange("impact_culture", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="impact_blockers"
                     label="To what extent would you agree that your organisation currently has a culture of understanding and measuring impact?"
                     value={formData.impact_blockers}
-                    onChange={(e) => handleSelectChange("impact_blockers", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="impact_buy_in"
                     label="How easy would it be to achieve buy-in from key people in your organisation to develop impact practices and measure them?"
                     value={formData.impact_buy_in}
-                    onChange={(e) => handleSelectChange("impact_buy_in", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
@@ -346,31 +346,31 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="theory_of_change_completeness"
                     label="How complete do you believe your theory of change is?"
                     value={formData.theory_of_change_completeness}
-                    onChange={(e) => handleSelectChange("theory_of_change_completeness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="theory_of_change_use"
                     label="To what extent is your theory of change used to drive the work of your organisation?"
                     value={formData.theory_of_change_use}
-                    onChange={(e) => handleSelectChange("theory_of_change_use", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="theory_of_change_willingness"
                     label="To what extent do you think your organisation would be willing to revisit your theory of change?"
                     value={formData.theory_of_change_willingness}
-                    onChange={(e) => handleSelectChange("theory_of_change_willingness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="theory_of_change_simplicity"
                     label="To what extent do you agree that your theory of change is simple and straight forward?"
                     value={formData.theory_of_change_simplicity}
-                    onChange={(e) => handleSelectChange("theory_of_change_simplicity", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="theory_of_change_definitions"
                     label="To what extent would you agree that the measures in your theory of change are measures of impact and not measures of reach?"
                     value={formData.theory_of_change_definitions}
-                    onChange={(e) => handleSelectChange("theory_of_change_definitions", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
@@ -380,43 +380,43 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="measurement_framework_feasibility"
                     label="Is your framework feasible, cost effective, time efficient, resource appropriate and producing good quality, and reliable data?"
                     value={formData.measurement_framework_feasibility}
-                    onChange={(e) => handleSelectChange("measurement_framework_feasibility", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_indicators"
                     label="To what extent do you feel you are measuring too many things?"
                     value={formData.measurement_framework_indicators}
-                    onChange={(e) => handleSelectChange("measurement_framework_indicators", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_outcomes"
                     label="To what extent do you feel that you are collecting only output rather than outcome measures?"
                     value={formData.measurement_framework_outcomes}
-                    onChange={(e) => handleSelectChange("measurement_framework_outcomes", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_validation"
                     label="To what extent do you believe your outcomes measures are based on validated scales?"
                     value={formData.measurement_framework_validation}
-                    onChange={(e) => handleSelectChange("measurement_framework_validation", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_comparison"
                     label="To what extent do you feel you can compare your organisations impact to others?"
                     value={formData.measurement_framework_comparison}
-                    onChange={(e) => handleSelectChange("measurement_framework_comparison", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_demographics"
                     label="To what extent are you able to use demographic measures to assess your reaching your target population?"
                     value={formData.measurement_framework_demographics}
-                    onChange={(e) => handleSelectChange("measurement_framework_demographics", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="measurement_framework_segmentation"
                     label="To what extent are you using factors to interrogate your outcome measures by characteristic?"
                     value={formData.measurement_framework_segmentation}
-                    onChange={(e) => handleSelectChange("measurement_framework_segmentation", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
@@ -426,49 +426,49 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="data_structure"
                     label="To what extent do you use defined and structured data fields rather than free text?"
                     value={formData.data_structure}
-                    onChange={(e) => handleSelectChange("data_structure", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_uniqueness"
                     label="To what extent are you able to use your data and systems to track participants over time?"
                     value={formData.data_uniqueness}
-                    onChange={(e) => handleSelectChange("data_uniqueness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_expertise"
                     label="To what extent would you describe your staff as 'data savvy'?"
                     value={formData.data_expertise}
-                    onChange={(e) => handleSelectChange("data_expertise", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_completeness"
                     label="How confident are you that you have complete and useful datasets collected from beneficiaries?"
                     value={formData.data_completeness}
-                    onChange={(e) => handleSelectChange("data_completeness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_quality"
                     label="To what extent is your data quality checked and maintained regularly?"
                     value={formData.data_quality}
-                    onChange={(e) => handleSelectChange("data_quality", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_consistency"
                     label="Is data structure and format consistent over time?"
                     value={formData.data_consistency}
-                    onChange={(e) => handleSelectChange("data_consistency", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_effectiveness"
                     label="To what extent do you believe your data is being effectively collected and reported on?"
                     value={formData.data_effectiveness}
-                    onChange={(e) => handleSelectChange("data_effectiveness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="data_automaticity"
                     label="To what extent is your data capture automated and free from manual processes?"
                     value={formData.data_automaticity}
-                    onChange={(e) => handleSelectChange("data_automaticity", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
@@ -478,31 +478,31 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                     name="system_appropriate"
                     label="Is the number of systems being operated appropriate for the organisation?"
                     value={formData.system_appropriate}
-                    onChange={(e) => handleSelectChange("system_appropriate", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="system_fitness"
                     label="Are the systems modern and fit for purpose?"
                     value={formData.system_fitness}
-                    onChange={(e) => handleSelectChange("system_fitness", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="system_personnel"
                     label="Does the organisation have the appropriate personnel and support in place to run their systems?"
                     value={formData.system_personnel}
-                    onChange={(e) => handleSelectChange("system_personnel", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="system_customization"
                     label="Is it possible for the client to customise impact relevant systems without external support services?"
                     value={formData.system_customization}
-                    onChange={(e) => handleSelectChange("system_customization", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                   <ScoreSelect
                     name="system_connectivity"
                     label="If applicable, Are your systems able interact with each other?"
                     value={formData.system_connectivity}
-                    onChange={(e) => handleSelectChange("system_connectivity", e.target.value)}
+                    onChange={handleSelectChange}
                   />
                 </div>
               </TabsContent>
