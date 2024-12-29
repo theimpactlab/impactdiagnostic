@@ -145,11 +145,11 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   function determineBackgroundColor(score: number): string {
     if (score <= 4) {
-      return 'rgba(239, 68, 68, 0.6)' // Red for low scores
+      return '#EF4444' // Red for low scores
     } else if (score <= 7) {
-      return 'rgba(250, 204, 21, 0.6)' // Yellow for medium scores
+      return '#FBBF24' // Amber for medium scores
     } else {
-      return 'rgba(34, 197, 94, 0.6)' // Green for high scores
+      return '#22C55E' // Green for high scores
     }
   }
 
@@ -169,7 +169,15 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
       {
         label: 'Average Scores',
         data: Object.values(scoreSummary),
-        backgroundColor: Object.values(scoreSummary).map(determineBackgroundColor),
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.6)',
+          'rgba(54, 162, 235, 0.6)',
+          'rgba(255, 206, 86, 0.6)',
+          'rgba(75, 192, 192, 0.6)',
+          'rgba(153, 102, 255, 0.6)',
+          'rgba(255, 159, 64, 0.6)',
+          'rgba(199, 199, 199, 0.6)',
+        ],
         borderColor: '#fff',
         borderWidth: 1,
       },
@@ -272,24 +280,26 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             </TabsContent>
             <TabsContent value="chart">
               <div className="space-y-8">
+                <h2 className="text-2xl font-bold text-center">Impact Assessment Chart</h2>
                 <div className="chart-container" style={{ height: '400px' }}>
                   <PolarArea data={chartData} options={chartOptions} />
                 </div>
+                <h2 className="text-2xl font-bold text-center mt-8">Section Scores Summary</h2>
                 <div className="overflow-x-auto">
                   <table className="min-w-full bg-white border border-gray-300">
                     <thead>
                       <tr className="bg-gray-100">
                         <th className="py-2 px-4 border-b text-left">Section</th>
                         <th className="py-2 px-4 border-b text-left">Score</th>
-                        <th className="py-2 px-4 border-b text-left">Description</th>
                       </tr>
                     </thead>
                     <tbody>
                       {Object.entries(scoreSummary).map(([section, score]) => (
                         <tr key={section} className="hover:bg-gray-50">
                           <td className="py-2 px-4 border-b">{section}</td>
-                          <td className="py-2 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>{score.toFixed(2)}</td>
-                          <td className="py-2 px-4 border-b">{getScoreDescription(score)}</td>
+                          <td className="py-2 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>
+                            {score.toFixed(2)}
+                          </td>
                         </tr>
                       ))}
                     </tbody>
