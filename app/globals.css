@@ -94,3 +94,17 @@
   background-color: #f3f4f6;
 }
 
+/* Ensure dropdown background is opaque */
+[data-radix-popper-content-wrapper] {
+  background-color: white !important;
+}
+
+.select-content, 
+.select-item {
+  background-color: white !important;
+}
+
+.select-item:hover {
+  background-color: #f3f4f6 !important;
+}
+
