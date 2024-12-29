@@ -120,14 +120,29 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         .from('assessments')
         .select('*')
         .eq('organization_id', params.orgId)
+        .order('created_at', { ascending: false })
+        .limit(1)
         .single()
 
-      if (error) {
+      if (error && error.code !== 'PGRST116') {
         throw error
       }
 
       if (data) {
         setFormData(data)
+      } else {
+        // If no assessment exists, fetch the organization name
+        const { data: orgData, error: orgError } = await supabase
+          .from('organizations')
+          .select('name')
+          .eq('id', params.orgId)
+          .single()
+
+        if (orgError) {
+          throw orgError
+        }
+
+        setFormData({ ...initialFormData, organizationName: orgData.name })
       }
     } catch (error) {
       console.error('Error in fetchAssessmentData:', error)
@@ -151,9 +166,10 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('assessments')
-        .upsert(formData)
+        .upsert({ ...formData, organization_id: params.orgId })
+        .select()
 
       if (error) {
         throw error
