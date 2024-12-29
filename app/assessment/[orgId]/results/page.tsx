@@ -7,11 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { supabase } from '@/lib/supabase'
 import { PolarArea } from 'react-chartjs-2'
-import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend, Title } from 'chart.js'
 import { Loader2 } from 'lucide-react'
 import { ChartOptions } from 'chart.js'
 
-ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
+ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend, Title)
 
 interface AssessmentResult {
   [key: string]: any;
@@ -215,7 +215,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
         text: 'Impact Assessment Results',
         font: {
           size: 20,
-          weight: 'bold' as const,
+          weight: 'bold',
         },
         padding: {
           top: 10,
