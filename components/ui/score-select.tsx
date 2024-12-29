@@ -19,7 +19,7 @@ export function ScoreSelect({ name, label, value, onChange }: ScoreSelectProps) 
         </Label>
         <Select
           value={value}
-          onValueChange={(value) => onChange(name, value)}
+          onValueChange={(newValue) => onChange(name, newValue)}
         >
           <SelectTrigger id={name} className="w-full mt-2">
             <SelectValue placeholder="Select a score" />
