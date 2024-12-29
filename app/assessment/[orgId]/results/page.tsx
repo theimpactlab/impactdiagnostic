@@ -185,6 +185,8 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   }
 
   const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
     scales: {
       r: {
         beginAtZero: true,
@@ -291,7 +293,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             <TabsContent value="chart">
               <div className="space-y-8">
                 <h2 className="text-2xl font-bold text-center">Impact Assessment Chart</h2>
-                <div className="chart-container" style={{ height: '500px' }}>
+                <div className="chart-container" style={{ height: '600px', width: '100%' }}>
                   <PolarArea data={chartData} options={chartOptions} />
                 </div>
                 <h2 className="text-2xl font-bold text-center mt-8">Section Scores Summary</h2>
@@ -299,14 +301,14 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                   <table className="min-w-full bg-white border border-gray-300">
                     <thead>
                       <tr className="bg-gray-100">
-                        <th className="py-2 px-4 border-b text-left">Section</th>
+                        <th className="py-2 px-4 border-b border-r text-left">Section</th>
                         <th className="py-2 px-4 border-b text-left">Score</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(scoreSummary).map(([section, score]) => (
-                        <tr key={section} className="hover:bg-gray-50">
-                          <td className="py-2 px-4 border-b">{section}</td>
+                      {Object.entries(scoreSummary).map(([section, score], index) => (
+                        <tr key={section} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
+                          <td className="py-2 px-4 border-b border-r">{section}</td>
                           <td className="py-2 px-4 border-b font-semibold" style={{color: determineBackgroundColor(score)}}>
                             {score.toFixed(2)}
                           </td>
