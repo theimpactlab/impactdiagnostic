@@ -286,7 +286,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
               <TabsContent value="purpose" className="space-y-6">
                 <ScoreSelect
                   name="alignment_score"
-                  label="What was your team'salignment to purpose score?"
+                  label="What was your team's alignment to purpose score?"
                   value={formData.alignment_score}
                   onChange={handleSelectChange}
                 />
