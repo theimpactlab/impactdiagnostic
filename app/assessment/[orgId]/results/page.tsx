@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { supabase } from '@/lib/supabase'
 import { PolarArea } from 'react-chartjs-2'
 import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend } from 'chart.js'
+import { Loader2 } from 'lucide-react'
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend)
 
@@ -79,15 +81,15 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   function calculateScoreSummary(data: AssessmentResult) {
     const summary: ScoreSummary = {
-      'Purpose Alignment Score': data.alignment_score || 0,
-      'Purpose Statement Score': calculateAverageScore([
+      'Purpose Alignment': data.alignment_score || 0,
+      'Purpose Statement': calculateAverageScore([
         data.purpose_statement_length,
         data.purpose_statement_common_words,
         data.purpose_statement_uniqueness,
         data.purpose_statement_clarity,
         data.purpose_statement_focus
       ]),
-      'Impact Leadership Score': calculateAverageScore([
+      'Impact Leadership': calculateAverageScore([
         data.impact_leadership,
         data.impact_appetite,
         data.impact_desire,
@@ -95,14 +97,14 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
         data.impact_blockers,
         data.impact_buy_in
       ]),
-      'Theory of Change Score': calculateAverageScore([
+      'Theory of Change': calculateAverageScore([
         data.theory_of_change_completeness,
         data.theory_of_change_use,
         data.theory_of_change_willingness,
         data.theory_of_change_simplicity,
         data.theory_of_change_definitions
       ]),
-      'Measurement Framework Score': calculateAverageScore([
+      'Measurement Framework': calculateAverageScore([
         data.measurement_framework_feasibility,
         data.measurement_framework_indicators,
         data.measurement_framework_outcomes,
@@ -111,7 +113,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
         data.measurement_framework_demographics,
         data.measurement_framework_segmentation
       ]),
-      'Data Review Score': calculateAverageScore([
+      'Data Review': calculateAverageScore([
         data.data_structure,
         data.data_uniqueness,
         data.data_expertise,
@@ -121,7 +123,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
         data.data_effectiveness,
         data.data_automaticity
       ]),
-      'System Review Score': calculateAverageScore([
+      'System Review': calculateAverageScore([
         data.system_appropriate,
         data.system_fitness,
         data.system_personnel,
@@ -143,11 +145,21 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   function determineBackgroundColor(score: number): string {
     if (score <= 4) {
-      return 'rgba(232, 99, 99, 0.6)' // Red for low scores
+      return 'rgba(239, 68, 68, 0.6)' // Red for low scores
     } else if (score <= 7) {
-      return 'rgba(255, 206, 86, 0.6)' // Amber for medium scores
+      return 'rgba(250, 204, 21, 0.6)' // Yellow for medium scores
     } else {
-      return 'rgba(75, 192, 192, 0.6)' // Green for high scores
+      return 'rgba(34, 197, 94, 0.6)' // Green for high scores
+    }
+  }
+
+  function getScoreDescription(score: number): string {
+    if (score <= 4) {
+      return 'Needs significant improvement'
+    } else if (score <= 7) {
+      return 'Shows promise, but room for growth'
+    } else {
+      return 'Strong performance'
     }
   }
 
@@ -194,6 +206,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Loading assessment results...</h2>
           <p className="text-gray-500">Please wait while we fetch the data.</p>
         </div>
@@ -218,49 +231,69 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   }
 
   return (
-    <Card className="max-w-4xl mx-auto my-8">
-      <CardHeader>
-        <CardTitle>Assessment Results for {organizationName}</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-6">
-          <div id="scoreSummary">
-            <h2 className="text-xl font-semibold mb-4">Score Summary</h2>
-            <table className="w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 p-2">Section</th>
-                  <th className="border border-gray-300 p-2">Average Score</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(scoreSummary).map(([section, score]) => (
-                  <tr key={section}>
-                    <td className="border border-gray-300 p-2">{section}</td>
-                    <td className="border border-gray-300 p-2">{score}</td>
-                  </tr>
+    <div className="container mx-auto py-8">
+      <Card className="max-w-4xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-2xl">Assessment Results for {organizationName}</CardTitle>
+          <CardDescription>Review your organization's performance across key areas</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs defaultValue="summary" className="space-y-4">
+            <TabsList>
+              <TabsTrigger value="summary">Summary</TabsTrigger>
+              <TabsTrigger value="chart">Chart</TabsTrigger>
+              <TabsTrigger value="details">Detailed Scores</TabsTrigger>
+            </TabsList>
+            <TabsContent value="summary">
+              <div className="space-y-4">
+                <div className="text-center p-4 bg-gray-100 rounded-lg">
+                  <h2 className="text-2xl font-bold">Overall Average Score</h2>
+                  <p className="text-4xl font-bold text-blue-600">{overallAverage.toFixed(2)}</p>
+                  <p className="text-lg text-gray-600">{getScoreDescription(overallAverage)}</p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Object.entries(scoreSummary).map(([section, score]) => (
+                    <Card key={section} className="p-4">
+                      <h3 className="text-lg font-semibold">{section}</h3>
+                      <p className="text-3xl font-bold" style={{color: determineBackgroundColor(score)}}>{score.toFixed(2)}</p>
+                      <p className="text-sm text-gray-600">{getScoreDescription(score)}</p>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+            <TabsContent value="chart">
+              <div className="chart-container" style={{ height: '400px' }}>
+                <PolarArea data={chartData} options={chartOptions} />
+              </div>
+            </TabsContent>
+            <TabsContent value="details">
+              <div className="space-y-4">
+                {results && Object.entries(results).map(([key, value]) => (
+                  <div key={key} className="border-b pb-2">
+                    <h3 className="text-lg font-semibold">{key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                    <p>{value}</p>
+                  </div>
                 ))}
-              </tbody>
-            </table>
+              </div>
+            </TabsContent>
+          </Tabs>
+          <div className="mt-6 flex justify-between">
+            <Button 
+              onClick={() => router.push('/dashboard')} 
+              variant="outline"
+            >
+              Return to Dashboard
+            </Button>
+            <Button 
+              onClick={() => router.push(`/assessment/${params.orgId}`)}
+            >
+              Update Assessment
+            </Button>
           </div>
-
-          <div id="overallAverageScoreDisplay">
-            <h2 className="text-xl font-semibold">Overall Average Score: {overallAverage}</h2>
-          </div>
-
-          <div className="chart-container" style={{ height: '400px' }}>
-            <PolarArea data={chartData} options={chartOptions} />
-          </div>
-
-          <Button 
-            onClick={() => router.push('/dashboard')} 
-            className="mt-4"
-          >
-            Return to Dashboard
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
