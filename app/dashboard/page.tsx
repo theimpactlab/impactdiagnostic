@@ -37,7 +37,6 @@ export default function Dashboard() {
         throw new Error('Failed to fetch organizations')
       }
 
-      console.log('Fetched organizations:', data)
       setOrganizations(data || [])
     } catch (error) {
       console.error('Error:', error)
@@ -55,8 +54,6 @@ export default function Dashboard() {
       if (!newOrgName.trim()) {
         throw new Error('Organization name is required')
       }
-
-      console.log('Creating new organization:', newOrgName)
       
       const { data, error } = await supabase
         .from('organizations')
@@ -68,7 +65,6 @@ export default function Dashboard() {
         throw new Error('Failed to create organization')
       }
 
-      console.log('Created organization:', data)
       setNewOrgName('')
       await fetchOrganizations()
     } catch (error) {
