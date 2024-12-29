@@ -116,7 +116,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
-      const { data, error } = await supabase
+      const { data: assessmentData, error: assessmentError } = await supabase
         .from('assessments')
         .select('*')
         .eq('organization_id', params.orgId)
@@ -124,24 +124,23 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
         .limit(1)
         .single()
 
-      if (error && error.code !== 'PGRST116') {
-        throw error
+      if (assessmentError && assessmentError.code !== 'PGRST116') {
+        throw assessmentError
       }
 
-      if (data) {
-        setFormData(data)
+      const { data: orgData, error: orgError } = await supabase
+        .from('organizations')
+        .select('name')
+        .eq('id', params.orgId)
+        .single()
+
+      if (orgError) {
+        throw orgError
+      }
+
+      if (assessmentData) {
+        setFormData({ ...assessmentData, organizationName: orgData.name })
       } else {
-        // If no assessment exists, fetch the organization name
-        const { data: orgData, error: orgError } = await supabase
-          .from('organizations')
-          .select('name')
-          .eq('id', params.orgId)
-          .single()
-
-        if (orgError) {
-          throw orgError
-        }
-
         setFormData({ ...initialFormData, organizationName: orgData.name })
       }
     } catch (error) {
