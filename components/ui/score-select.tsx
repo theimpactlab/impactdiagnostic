@@ -13,32 +13,34 @@ interface ScoreSelectProps {
 export function ScoreSelect({ name, label, value, onChange }: ScoreSelectProps) {
   return (
     <Card className="p-6 hover:shadow-md transition-shadow duration-200">
-      <div className="space-y-4">
-        <Label htmlFor={name} className="text-lg font-medium leading-none text-gray-900">
+      <div className="flex items-center justify-between space-x-4">
+        <Label htmlFor={name} className="text-lg font-medium leading-none text-gray-900 flex-grow">
           {label}
         </Label>
-        <Select
-          value={value}
-          onValueChange={(newValue) => onChange(name, newValue)}
-        >
-          <SelectTrigger id={name} className="w-full mt-2 bg-white border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-            <SelectValue placeholder="Select a score" />
-          </SelectTrigger>
-          <SelectContent>
-            {[...Array(11)].map((_, i) => (
-              <SelectItem key={i} value={i.toString()} className="cursor-pointer hover:bg-gray-100">
-                <div className="flex items-center justify-between w-full">
-                  <span className="font-medium">{i}</span>
-                  <span className="text-sm text-gray-500">{getScoreDescription(i)}</span>
-                </div>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <p className="text-sm text-gray-500 mt-2">
-          {getScoreExplanation(parseInt(value))}
-        </p>
+        <div className="w-40">
+          <Select
+            value={value}
+            onValueChange={(newValue) => onChange(name, newValue)}
+          >
+            <SelectTrigger id={name} className="w-full bg-white border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+              <SelectValue placeholder="Select a score" />
+            </SelectTrigger>
+            <SelectContent>
+              {[...Array(11)].map((_, i) => (
+                <SelectItem key={i} value={i.toString()} className="cursor-pointer hover:bg-gray-100">
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-medium">{i}</span>
+                    <span className="text-sm text-gray-500">{getScoreDescription(i)}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
+      <p className="text-sm text-gray-500 mt-2">
+        {getScoreExplanation(parseInt(value))}
+      </p>
     </Card>
   )
 }
