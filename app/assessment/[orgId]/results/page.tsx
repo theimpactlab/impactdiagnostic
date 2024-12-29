@@ -197,7 +197,12 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     plugins: {
       legend: {
         display: true,
-        position: 'bottom' as const,
+        position: 'left' as const,
+        align: 'start' as const,
+        labels: {
+          boxWidth: 20,
+          padding: 20,
+        },
       },
       title: {
         display: true,
@@ -214,6 +219,11 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             return `${label}: ${value.toFixed(2)}`
           },
         },
+      },
+    },
+    layout: {
+      padding: {
+        left: 100, // Adjust this value to create space for the legend
       },
     },
   }
@@ -263,7 +273,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             <TabsContent value="summary">
               <div className="space-y-4">
                 <div className="text-center p-4 bg-gray-100 rounded-lg">
-                  <h2 className="text-2xl font-bold">Overall Average Score</h2>
+                  <h2 className="text-2xl font-bold pb-2 mb-2 border-b-2 border-gray-300">Summary</h2>
                   <p className="text-4xl font-bold text-blue-600">{overallAverage.toFixed(2)}</p>
                   <p className="text-lg text-gray-600">{getScoreDescription(overallAverage)}</p>
                 </div>
@@ -281,7 +291,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             <TabsContent value="chart">
               <div className="space-y-8">
                 <h2 className="text-2xl font-bold text-center">Impact Assessment Chart</h2>
-                <div className="chart-container" style={{ height: '400px' }}>
+                <div className="chart-container" style={{ height: '500px' }}>
                   <PolarArea data={chartData} options={chartOptions} />
                 </div>
                 <h2 className="text-2xl font-bold text-center mt-8">Section Scores Summary</h2>
