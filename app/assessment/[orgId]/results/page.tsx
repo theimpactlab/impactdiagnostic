@@ -245,7 +245,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   const handleDownloadCSV = () => {
     if (csvLinkRef.current) {
-      csvLinkRef.current.link.click();
+      csvLinkRef.current.click();
     }
   };
 
