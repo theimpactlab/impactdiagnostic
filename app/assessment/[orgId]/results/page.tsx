@@ -310,6 +310,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                     data={prepareCSVData()}
                     filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                    target="_blank"
                   >
                     Download CSV
                   </CSVLink>
