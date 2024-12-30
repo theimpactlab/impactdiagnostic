@@ -16,8 +16,7 @@ export function ScoreSelect({ name, label, value, onChange, isAlignmentScore = f
     if (isAlignmentScore) {
       // Convert range to single digit score
       const numericValue = parseInt(newValue, 10);
-      const mappedValue = Math.floor(numericValue / 11).toString();
-      onChange(name, mappedValue);
+      onChange(name, numericValue.toString());
     } else {
       onChange(name, newValue);
     }
@@ -26,9 +25,13 @@ export function ScoreSelect({ name, label, value, onChange, isAlignmentScore = f
   const getDisplayValue = (value: string) => {
     if (isAlignmentScore) {
       const numericValue = parseInt(value, 10);
-      return `${numericValue * 11}-${(numericValue + 1) * 11 - 1}`;
+      const ranges = [
+        '0-10', '11-20', '21-30', '31-40', '41-50',
+        '51-60', '61-70', '71-80', '81-90', '91-100'
+      ];
+      return ranges[numericValue] || 'Select a score';
     }
-    return value;
+    return value || 'Select a score';
   };
 
   return (
@@ -37,13 +40,15 @@ export function ScoreSelect({ name, label, value, onChange, isAlignmentScore = f
         <Label htmlFor={name} className="text-lg font-medium leading-none text-gray-900 flex-grow">
           {label}
         </Label>
-        <div className="w-24">
+        <div className="w-32">
           <Select
             value={value}
             onValueChange={handleChange}
           >
             <SelectTrigger id={name} className="w-full bg-white border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-              <SelectValue placeholder="Score" />
+              <SelectValue placeholder="Select a score">
+                {getDisplayValue(value)}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent className="bg-white shadow-lg rounded-md overflow-hidden">
               {isAlignmentScore ? (
@@ -53,7 +58,7 @@ export function ScoreSelect({ name, label, value, onChange, isAlignmentScore = f
                     value={i.toString()} 
                     className="cursor-pointer hover:bg-gray-100 bg-white py-2 px-4"
                   >
-                    {`${i * 11}-${(i + 1) * 11 - 1}`}
+                    {`${i * 10 + 1}-${(i + 1) * 10}`}
                   </SelectItem>
                 ))
               ) : (
