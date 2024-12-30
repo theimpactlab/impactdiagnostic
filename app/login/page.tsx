@@ -22,11 +22,8 @@ export default function Login() {
 
     try {
       if (username === 'admin' && password === 'password') {
-        // Set authentication
         setAuth()
-        // Set auth cookie
         document.cookie = 'auth=true; path=/'
-        // Navigate to dashboard
         window.location.href = '/dashboard'
       } else {
         setError('Invalid credentials')
@@ -40,22 +37,23 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
+    <main className="grid min-h-screen place-items-center bg-gray-50">
+      <div className="w-full max-w-md space-y-8 px-4 sm:px-6">
+        <div className="flex flex-col items-center justify-center">
           <img 
             src="https://www.trustimpact.com/wp-content/uploads/2020/09/trust-impact-logo.png" 
             alt="Trust Impact Logo" 
-            className="mx-auto h-16"
+            className="h-16 w-auto"
           />
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
             Impact Diagnostic Assessment Tool
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-center text-sm text-gray-600">
             Please sign in to access the assessment tool
           </p>
         </div>
-        <Card className="mt-8">
+
+        <Card>
           <CardHeader>
             <CardTitle className="text-center">Sign in to your account</CardTitle>
           </CardHeader>
@@ -101,7 +99,7 @@ export default function Login() {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </main>
   )
 }
 
