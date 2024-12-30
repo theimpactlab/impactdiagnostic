@@ -168,9 +168,21 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
       // Create a new object without the organizationName
       const { organizationName, ...assessmentData } = formData;
 
+      // Convert empty string scores to null and non-empty strings to integers
+      const processedData = Object.entries(assessmentData).reduce((acc, [key, value]) => {
+        if (key.includes('score') || key.includes('statement') || key.includes('impact') || 
+            key.includes('theory') || key.includes('framework') || key.includes('data') || 
+            key.includes('system')) {
+          acc[key] = value === '' ? null : parseInt(value, 10);
+        } else {
+          acc[key] = value;
+        }
+        return acc;
+      }, {} as Record<string, any>);
+
       const { data, error } = await supabase
         .from('assessments')
-        .upsert({ ...assessmentData, organization_id: params.orgId })
+        .upsert({ ...processedData, organization_id: params.orgId })
         .select()
 
       if (error) {
