@@ -165,9 +165,12 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
     setError(null)
 
     try {
+      // Create a new object without the organizationName
+      const { organizationName, ...assessmentData } = formData;
+
       const { data, error } = await supabase
         .from('assessments')
-        .upsert({ ...formData, organization_id: params.orgId })
+        .upsert({ ...assessmentData, organization_id: params.orgId })
         .select()
 
       if (error) {
