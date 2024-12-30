@@ -10,6 +10,7 @@ import { PolarArea } from 'react-chartjs-2'
 import { Chart as ChartJS, RadialLinearScale, ArcElement, Tooltip, Legend, Title } from 'chart.js'
 import { Loader2 } from 'lucide-react'
 import { ChartOptions } from 'chart.js'
+import { CSVLink } from "react-csv"
 
 ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend, Title)
 
@@ -164,6 +165,13 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     }
   }
 
+  function prepareCSVData(): Array<{ Section: string; Score: number }> {
+    return Object.entries(scoreSummary).map(([section, score]) => ({
+      Section: section,
+      Score: score,
+    }))
+  }
+
   const chartData = {
     labels: Object.keys(scoreSummary),
     datasets: [
@@ -296,6 +304,16 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             </TabsContent>
             <TabsContent value="chart">
               <div className="space-y-8">
+                <div className="flex justify-between items-center">
+                  <h2 className="text-2xl font-bold">Impact Assessment Results</h2>
+                  <CSVLink
+                    data={prepareCSVData()}
+                    filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
                 <div className="chart-container mx-auto" style={{ height: '600px', maxWidth: '800px' }}>
                   <PolarArea data={chartData} options={chartOptions} />
                 </div>
