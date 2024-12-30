@@ -53,16 +53,50 @@
   * {
     @apply border-border;
   }
-  
-  html,
-  body {
-    @apply h-full m-0 p-0;
-  }
-
   body {
     @apply bg-background text-foreground;
   }
 }
 
-/* Keep existing select styles */
+/* Ensure dropdown background is opaque */
+.select-content {
+  background-color: white !important;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.select-item {
+  background-color: white !important;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.select-item:hover {
+  background-color: #f3f4f6 !important;
+}
+
+/* Ensure dropdown wrapper is opaque */
+[data-radix-popper-content-wrapper] {
+  background-color: white !important;
+}
+
+/* Additional styles to ensure proper layout */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+#__next {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 
