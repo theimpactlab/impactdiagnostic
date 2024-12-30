@@ -9,6 +9,7 @@ declare module 'react-csv' {
     target?: string;
     className?: string;
     style?: React.CSSProperties;
+    onClick?: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   }
 
   export const CSVLink: ComponentType<CSVLinkProps>;
