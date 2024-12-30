@@ -30,7 +30,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   const [overallAverage, setOverallAverage] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const csvLinkRef = useRef<HTMLAnchorElement>(null);
+  const csvLinkRef = useRef<CSVLink>(null);
 
   useEffect(() => {
     fetchAssessmentResults()
@@ -245,7 +245,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
 
   const handleDownloadCSV = () => {
     if (csvLinkRef.current) {
-      csvLinkRef.current.click();
+      csvLinkRef.current.link.click();
     }
   };
 
@@ -361,7 +361,9 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
             className="hidden"
             ref={csvLinkRef}
-          />
+          >
+            Download CSV
+          </CSVLink>
           <div className="mt-8 flex justify-between">
             <Button 
               onClick={() => router.push('/dashboard')} 
