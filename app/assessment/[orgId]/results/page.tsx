@@ -361,9 +361,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
             filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
             className="hidden"
             ref={csvLinkRef}
-          >
-            Download CSV
-          </CSVLink>
+          />
           <div className="mt-8 flex justify-between">
             <Button 
               onClick={() => router.push('/dashboard')} 
