@@ -288,6 +288,7 @@ export default function AssessmentForm({ params }: { params: { orgId: string } }
                   label="What was your team's alignment to purpose score?"
                   value={formData.alignment_score}
                   onChange={handleSelectChange}
+                  isAlignmentScore={true}
                 />
                 <ScoreSelect
                   name="purpose_statement_length"
