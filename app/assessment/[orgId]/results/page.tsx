@@ -348,7 +348,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                   </div>
                 ))}
               </div>
-            </TabsContent></TabsContent>
+            </TabsContent>
           </Tabs>
           <div style={{ display: 'none' }}>
             <CSVLink
