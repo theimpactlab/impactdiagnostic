@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, useRef } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -30,7 +30,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   const [overallAverage, setOverallAverage] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const csvLinkRef = useRef<HTMLAnchorElement>(null);
+  const csvLinkRef = useRef<CSVLink>(null);
 
   useEffect(() => {
     fetchAssessmentResults()
@@ -243,6 +243,12 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
     },
   }
 
+  const handleDownloadCSV = () => {
+    if (csvLinkRef.current) {
+      csvLinkRef.current.link.click();
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -308,7 +314,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-bold">Impact Assessment Results</h2>
                   <Button
-                    onClick={() => csvLinkRef.current?.click()}
+                    onClick={handleDownloadCSV}
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                   >
                     Download CSV
@@ -350,13 +356,14 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
               </div>
             </TabsContent>
           </Tabs>
-          <div style={{ display: 'none' }}>
-            <CSVLink
-              data={prepareCSVData()}
-              filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
-              ref={csvLinkRef}
-            />
-          </div>
+          <CSVLink
+            data={prepareCSVData()}
+            filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
+            className="hidden"
+            ref={csvLinkRef}
+          >
+            Download CSV
+          </CSVLink>
           <div className="mt-8 flex justify-between">
             <Button 
               onClick={() => router.push('/dashboard')} 
