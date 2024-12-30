@@ -30,7 +30,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   const [overallAverage, setOverallAverage] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const csvLinkRef = useRef<CSVLink>(null);
+  const csvLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     fetchAssessmentResults()
