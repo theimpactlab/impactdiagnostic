@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -30,12 +30,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
   const [overallAverage, setOverallAverage] = useState<number>(0)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [csvInstance, setCsvInstance] = useState<{ link: HTMLAnchorElement } | null>(null);
-  const csvLinkCallback = useCallback((node: HTMLAnchorElement) => {
-    if (node !== null) {
-      setCsvInstance({ link: node });
-    }
-  }, []);
+  const csvLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     fetchAssessmentResults()
@@ -313,7 +308,7 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                 <div className="flex justify-between items-center">
                   <h2 className="text-2xl font-bold">Impact Assessment Results</h2>
                   <Button
-                    onClick={() => csvInstance?.link.click()}
+                    onClick={() => csvLinkRef.current?.click()}
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
                   >
                     Download CSV
@@ -353,18 +348,13 @@ export default function AssessmentResults({ params }: { params: { orgId: string 
                   </div>
                 ))}
               </div>
-            </TabsContent>
+            </TabsContent></TabsContent>
           </Tabs>
           <div style={{ display: 'none' }}>
             <CSVLink
               data={prepareCSVData()}
               filename={`${organizationName.replace(/\s+/g, '_')}_assessment_results.csv`}
-              onClick={(event) => {
-                if (csvInstance) {
-                  csvInstance.link = event.currentTarget;
-                }
-              }}
-              ref={csvLinkCallback}
+              ref={csvLinkRef}
             />
           </div>
           <div className="mt-8 flex justify-between">
